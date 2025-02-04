@@ -3,6 +3,7 @@ import axios from "axios";
 import Header from "./components/Header";
 import { useEffect, useState } from "react";
 import { Container, Paper, Typography } from "@mui/material";
+import CardComponents from "./components/Card";
 
 function App() {
   const [puzzleList, setPuzzleList] = useState([]);
@@ -27,9 +28,7 @@ function App() {
       <Header />
       <Container>
         {puzzleList?.map((puzzle) => (
-          <Paper elevation={5}>
-            <Typography>{puzzle.title}</Typography>
-          </Paper>
+          <CardComponents key={puzzle._id} puzzle={puzzle} />
         ))}
       </Container>
     </>
