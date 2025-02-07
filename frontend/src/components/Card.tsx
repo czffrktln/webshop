@@ -1,15 +1,29 @@
-import { Card, CardMedia, Typography } from '@mui/material';
+import { Card, Typography } from '@mui/material';
+import { PuzzleType } from '../types';
 
-export default function CardComponents({ puzzle }) {
+interface PuzzleProps {
+  puzzle: PuzzleType
+}
 
-  const { title, image_link} = puzzle
+export default function CardComponents({ puzzle }: PuzzleProps) {
+
+  const { title, image_link, brand, price} = puzzle
 
   return (
-    <Card>
-      <CardMedia 
-        image={image_link}
+    <Card sx={{ 
+      width: "300px", 
+      // height: "350px", 
+      display: "flex", 
+      flexDirection: "column",
+      alignItems: "center",
+    }}>
+      <img 
+        style={{ width: "250px", padding: "10px", height: "250px", objectFit: "contain" }}
+        src={image_link}
       />
-      <Typography>{title}</Typography>
+      <Typography variant='h6' sx={{textAlign: "center"}}>{title}</Typography>
+      <Typography>{brand}</Typography>
+      <Typography>{price} Ft</Typography>
     </Card>
   )
 }
