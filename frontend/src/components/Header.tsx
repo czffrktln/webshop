@@ -1,12 +1,18 @@
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ExtensionIcon from "@mui/icons-material/Extension";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const navigate = useNavigate();
+
   return (
     <AppBar>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Box
+          onClick={() => navigate("/")}
+          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+        >
           <ExtensionIcon />
           <Typography variant="h5" sx={{ cursor: "pointer" }}>
             PuzzleShop

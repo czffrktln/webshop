@@ -3,6 +3,10 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Home from "./pages/Home.tsx";
+import Product from "./pages/Product.tsx";
+import { PuzzleProvider } from "./context/PuzzleContext";
 
 const theme = createTheme({
   palette: {
@@ -16,10 +20,29 @@ const theme = createTheme({
   },
 });
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/product/:id",
+        element: <Product />,
+      },
+    ],
+  },
+]);
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
-      <App />
+      <PuzzleProvider>
+        <RouterProvider router={router} />
+      </PuzzleProvider>
     </ThemeProvider>
   </StrictMode>
 );
