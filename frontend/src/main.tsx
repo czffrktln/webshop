@@ -6,6 +6,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home.tsx";
 import Product from "./pages/Product.tsx";
+import LoginCallback from "./pages/LoginCallback.tsx";
 import { PuzzleProvider } from "./context/PuzzleContext";
 
 const theme = createTheme({
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "callback",
+        element: <LoginCallback />,
       },
       {
         path: "/product/:id",
