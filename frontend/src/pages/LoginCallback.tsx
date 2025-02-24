@@ -4,12 +4,15 @@ import { jwtDecode } from "jwt-decode";
 import { UserContext } from "../context/UserContext";
 import { UserType } from "../types";
 import { useNavigate } from "react-router-dom";
-import { Typography } from "@mui/material";
+import { bouncy } from "ldrs";
+import { Box, Grid2 } from "@mui/material";
 
 export default function LoginCallback() {
   const { user, setUser } = useContext(UserContext);
 
   const navigate = useNavigate();
+
+  bouncy.register();
 
   console.log("logincallback render");
 
@@ -32,7 +35,7 @@ export default function LoginCallback() {
 
     const { email, given_name, name, picture, sub, _id } = decodedToken;
     setUser({ email, given_name, name, picture, sub, _id });
-    navigate("/");
+    // navigate("/");
   };
 
   console.log("user", user);
@@ -41,8 +44,13 @@ export default function LoginCallback() {
   }, []);
 
   return (
-    <>
-      <img src="https://cdn-icons-gif.flaticon.com/17905/17905768.gif" />
-    </>
+    <Grid2
+      container
+      justifyContent="center"
+      alignItems="center"
+      sx={{ height: "100vh" }}
+    >
+      <l-bouncy size="100" speed="1.75" color="#44656e"></l-bouncy>
+    </Grid2>
   );
 }
