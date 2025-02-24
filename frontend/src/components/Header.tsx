@@ -18,7 +18,7 @@ import PersonIcon from "@mui/icons-material/Person";
 
 export default function Header() {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const googleLink = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -36,6 +36,12 @@ export default function Header() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    setAnchorEl(null);
+    setUser(null)
+    navigate("/")
   };
 
   return (
@@ -78,7 +84,7 @@ export default function Header() {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </Box>
           ) : (

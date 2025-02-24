@@ -35,7 +35,7 @@ export default function LoginCallback() {
 
     const { email, given_name, name, picture, sub, _id } = decodedToken;
     setUser({ email, given_name, name, picture, sub, _id });
-    // navigate("/");
+    navigate("/");
   };
 
   console.log("user", user);

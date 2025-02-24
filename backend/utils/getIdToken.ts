@@ -10,9 +10,7 @@ const redirect_uri = process.env.REDIRECT_URI
 const url = "https://oauth2.googleapis.com/token"
 
 const getIdToken = async (code: string) => {
-  console.log("clientid", client_id);
 
-  
   try {
     const response = await axios.post(url, {
       client_id,
@@ -21,7 +19,6 @@ const getIdToken = async (code: string) => {
       code,
       grant_type: "authorization_code"
     })
-    console.log(response.data)
     return response.data.id_token
   }
   catch (error) {
