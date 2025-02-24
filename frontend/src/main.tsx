@@ -8,6 +8,7 @@ import Home from "./pages/Home.tsx";
 import Product from "./pages/Product.tsx";
 import LoginCallback from "./pages/LoginCallback.tsx";
 import { PuzzleProvider } from "./context/PuzzleContext";
+import { UserProvider } from "./context/UserContext.tsx";
 
 const theme = createTheme({
   palette: {
@@ -45,9 +46,11 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
-      <PuzzleProvider>
-        <RouterProvider router={router} />
-      </PuzzleProvider>
+      <UserProvider>
+        <PuzzleProvider>
+          <RouterProvider router={router} />
+        </PuzzleProvider>
+      </UserProvider>
     </ThemeProvider>
   </StrictMode>
 );

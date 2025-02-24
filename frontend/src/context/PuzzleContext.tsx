@@ -1,15 +1,24 @@
-import { createContext, Dispatch, SetStateAction, useState } from "react";
+import { createContext, useState } from "react";
 
 import { PuzzleType } from "../types";
 
 interface PuzzleContextType {
-  puzzleList: PuzzleType[];
-  setPuzzleList: Dispatch<SetStateAction<PuzzleType[]>>;
+  puzzleList: PuzzleType[] | [];
+  setPuzzleList: (puzzleList: PuzzleType[] | []) => void;
 }
 
-export const PuzzleContext = createContext<PuzzleContextType>();
+const defaultState: PuzzleContextType = {
+  puzzleList: [],
+  setPuzzleList: () => {},
+};
 
-export function PuzzleProvider({ children }) {
+export const PuzzleContext = createContext(defaultState);
+
+type PuzzleProviderProps = {
+  children: React.ReactNode;
+};
+
+export function PuzzleProvider({ children }: PuzzleProviderProps) {
   const [puzzleList, setPuzzleList] = useState<PuzzleType[]>([]);
 
   return (
