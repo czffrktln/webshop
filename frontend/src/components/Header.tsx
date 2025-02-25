@@ -1,3 +1,6 @@
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 import {
   AppBar,
   Toolbar,
@@ -11,9 +14,6 @@ import {
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ExtensionIcon from "@mui/icons-material/Extension";
-import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
-import { useContext, useState } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 
 export default function Header() {

@@ -14,31 +14,22 @@ export interface PuzzleType {
   review: string;
 }
 
-// export interface ResponseType {
-//   createdAt: string;
-//   email: string;
-//   given_name: string;
-//   iat: number;
-//   name: string;
-//   picture: string;
-//   sub: string;
-//   updatedAt: string;
-//   __v: number;
-//   _id: string;
-// }
-
-// export type UserType = Pick<
-//   ResponseType,
-//   "email" | "given_name" | "name" | "picture" | "sub" | "_id"
-// >;
-
 export interface UserType {
   email: string;
   given_name: string;
-
   name: string;
   picture: string;
   sub: string;
-
   _id: string;
+}
+
+export interface CartItemType {
+  _id: string;
+  brand: string;
+  title: string;
+  pieces: string;
+  serial_number: string;
+  price: string;
+  image_link: string;
+  quantity?: number
 }

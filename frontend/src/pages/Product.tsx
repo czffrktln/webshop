@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { PuzzleContext } from "../context/PuzzleContext";
 import { Box, Button, Container, Grid2, Typography } from "@mui/material";
-import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 
 export default function Product() {
   const { id } = useParams();
@@ -22,10 +21,6 @@ export default function Product() {
 
     rating,
   } = currentPuzzle;
-
-  console.log("id", id);
-  console.log("currentPuzzle", currentPuzzle);
-  console.log("puzzleList", puzzleList);
 
   return (
     <Container sx={{ marginTop: "100px" }}>

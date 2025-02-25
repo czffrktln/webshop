@@ -1,4 +1,5 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
+import { decodeToken } from "../utils/decodeToken";
 
 import { UserType } from "../types";
 
@@ -19,7 +20,13 @@ type UserProviderProps = {
 };
 
 export function UserProvider({ children }: UserProviderProps) {
+
   const [user, setUser] = useState<UserType | null>(null);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token')
+    if (token) setUser(decodeToken(token))
+  }, [])
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

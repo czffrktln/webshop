@@ -1,15 +1,18 @@
-import { Card, Typography, Box, Button } from "@mui/material";
-import { PuzzleType } from "../types";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { PuzzleType } from "../types";
+import { CartContext } from "../context/CartContext";
+import { Card, Typography, Box, Button } from "@mui/material";
 
 interface PuzzleProps {
   puzzle: PuzzleType;
 }
 
 export default function CardComponents({ puzzle }: PuzzleProps) {
-  const { title, image_link, brand, price, _id } = puzzle;
-
+  const { title, image_link, brand, price, _id, pieces, serial_number } = puzzle;
+  const { addToCart } = useContext(CartContext)
   const navigate = useNavigate();
+
 
   return (
     <Card
@@ -60,7 +63,7 @@ export default function CardComponents({ puzzle }: PuzzleProps) {
         <Typography sx={{ fontWeight: "bold", mt: 1 }}>{price} Ft</Typography>
       </Box>
       <Box sx={{ my: 2, height: "15%" }}>
-        <Button variant="contained">Add to cart</Button>
+        <Button variant="contained" onClick={() => addToCart({ title, image_link, brand, price, _id, pieces, serial_number })}>Add to cart</Button>
       </Box>
     </Card>
   );

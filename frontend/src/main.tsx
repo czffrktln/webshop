@@ -1,14 +1,15 @@
 import { StrictMode } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
-import { createTheme, ThemeProvider } from "@mui/material";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home.tsx";
 import Product from "./pages/Product.tsx";
 import LoginCallback from "./pages/LoginCallback.tsx";
 import { PuzzleProvider } from "./context/PuzzleContext";
 import { UserProvider } from "./context/UserContext.tsx";
+import { CartProvider } from "./context/CartContext.tsx";
+import { createTheme, ThemeProvider } from "@mui/material";
 
 const theme = createTheme({
   palette: {
@@ -46,11 +47,13 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
-      <UserProvider>
-        <PuzzleProvider>
-          <RouterProvider router={router} />
-        </PuzzleProvider>
-      </UserProvider>
+      <CartProvider>
+        <UserProvider>
+          <PuzzleProvider>
+            <RouterProvider router={router} />
+          </PuzzleProvider>
+        </UserProvider>
+      </CartProvider>
     </ThemeProvider>
   </StrictMode>
 );
