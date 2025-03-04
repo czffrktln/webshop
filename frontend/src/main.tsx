@@ -10,6 +10,7 @@ import { PuzzleProvider } from "./context/PuzzleContext";
 import { UserProvider } from "./context/UserContext.tsx";
 import { CartProvider } from "./context/CartContext.tsx";
 import { createTheme, ThemeProvider } from "@mui/material";
+import Cart from "./pages/Cart.tsx";
 
 const theme = createTheme({
   palette: {
@@ -21,6 +22,12 @@ const theme = createTheme({
       main: "#9BC4CB",
     },
   },
+  // typography: {
+  //   fontSize: 14,
+  //   h6: {
+  //     fontSize: 13,
+  //   },
+  // },
 });
 
 const router = createBrowserRouter([
@@ -39,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "/product/:id",
         element: <Product />,
+      },
+      {
+        path: "/cart",
+        element: <Cart />,
       },
     ],
   },

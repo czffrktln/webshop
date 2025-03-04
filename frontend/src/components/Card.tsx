@@ -9,14 +9,14 @@ interface PuzzleProps {
 }
 
 export default function CardComponents({ puzzle }: PuzzleProps) {
-  const { title, image_link, brand, price, _id, pieces, serial_number } = puzzle;
-  const { addToCart } = useContext(CartContext)
+  const { title, image_link, brand, price, _id, pieces, serial_number } =
+    puzzle;
+  const { addToCart } = useContext(CartContext);
   const navigate = useNavigate();
-
 
   return (
     <Card
-      onClick={() => navigate(`/product/${_id}`)}
+      // onClick={() => navigate(`/product/${_id}`)}
       sx={{
         cursor: "pointer",
         width: "300px",
@@ -32,7 +32,7 @@ export default function CardComponents({ puzzle }: PuzzleProps) {
         borderColor: "lightgrey",
       }}
     >
-      <Box sx={{ height: "60%" }}>
+      <Box sx={{ height: "60%" }} onClick={() => navigate(`/product/${_id}`)}>
         <img
           style={{
             width: "250px",
@@ -55,6 +55,7 @@ export default function CardComponents({ puzzle }: PuzzleProps) {
           px: 1,
           height: "35%",
         }}
+        onClick={() => navigate(`/product/${_id}`)}
       >
         <Typography variant="h6" sx={{ textAlign: "center" }} title={title}>
           {title.length > 25 ? title.slice(0, 22).trim() + "..." : title}
@@ -62,8 +63,24 @@ export default function CardComponents({ puzzle }: PuzzleProps) {
         <Typography>{brand}</Typography>
         <Typography sx={{ fontWeight: "bold", mt: 1 }}>{price} Ft</Typography>
       </Box>
+
       <Box sx={{ my: 2, height: "15%" }}>
-        <Button variant="contained" onClick={() => addToCart({ title, image_link, brand, price, _id, pieces, serial_number })}>Add to cart</Button>
+        <Button
+          variant="contained"
+          onClick={() =>
+            addToCart({
+              title,
+              image_link,
+              brand,
+              price,
+              _id,
+              pieces,
+              serial_number,
+            })
+          }
+        >
+          Add to cart
+        </Button>
       </Box>
     </Card>
   );

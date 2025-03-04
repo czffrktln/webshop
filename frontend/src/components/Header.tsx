@@ -11,14 +11,17 @@ import {
   Menu,
   MenuItem,
   IconButton,
+  Badge,
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ExtensionIcon from "@mui/icons-material/Extension";
 import PersonIcon from "@mui/icons-material/Person";
+import { CartContext } from "../context/CartContext";
 
 export default function Header() {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
+  const { numberOfItems } = useContext(CartContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const googleLink = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -40,8 +43,8 @@ export default function Header() {
 
   const handleLogout = () => {
     setAnchorEl(null);
-    setUser(null)
-    navigate("/")
+    setUser(null);
+    navigate("/");
   };
 
   return (
@@ -58,8 +61,19 @@ export default function Header() {
         </Box>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-          <IconButton sx={{ color: "primary.contrastText" }}>
-            <ShoppingCartIcon sx={{ fontSize: 25, cursor: "pointer" }} />
+          <IconButton
+            sx={{ color: "primary.contrastText" }}
+            onClick={() => navigate("/cart")}
+          >
+            <Badge
+              badgeContent={numberOfItems}
+              color="secondary"
+              sx={{
+                "& .MuiBadge-badge": { fontSize: 10, height: 15, minWidth: 15 },
+              }}
+            >
+              <ShoppingCartIcon sx={{ fontSize: 25, cursor: "pointer" }} />
+            </Badge>
           </IconButton>
           {user ? (
             <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
