@@ -1,4 +1,5 @@
-import { Button, Grid2, Typography } from "@mui/material";
+import { Button, Grid2, IconButton, Typography } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { CartContext } from "../context/CartContext";
 import { useContext } from "react";
@@ -17,7 +18,7 @@ export default function CartItem({ cartItem }: CartItemProps) {
       className="cartContainer"
       container
       flexDirection="column"
-      sx={{ height: "200px", width: "100%", borderBottom: "2px solid pink" }}
+      sx={{ height: "200px", width: "100%", borderBottom: "1px solid", borderColor: "primary.main" }}
       size={{ xs: 6 }}
     >
       <Grid2
@@ -51,38 +52,48 @@ export default function CartItem({ cartItem }: CartItemProps) {
             <Typography sx={{ typography: { xs: "subtitle2", sm: "h6" } }}>
               {title}
             </Typography>
-            <Typography variant="subtitle2">{price} HUF</Typography>
+            <Typography sx={{ typography: { xs: "subtitle2", sm: "h6" } }}><strong>{price} HUF</strong></Typography>
           </Grid2>
-          <Typography variant="caption">{brand}</Typography>
-          <Typography variant="caption">{pieces} db</Typography>
-          <Grid2 container gap={1}>
-            <Button
-              variant="contained"
-              sx={{
-                padding: 0,
-                minWidth: "25px",
-                textAlign: "center",
-                verticalAlign: "middle",
-                height: "25px",
-              }}
-            >
-              <Typography>−</Typography>
-            </Button>
-            <Typography>{quantity}</Typography>
+          <Grid2 container flexDirection="column">
+            <Typography sx={{ typography: { xs: "body2", sm: "subtitle1" } }}>{brand}</Typography>
+            <Typography sx={{ typography: { xs: "caption", sm: "subtitle2" } }}>{pieces} db</Typography>
+            {/* <Typography>Remove</Typography> */}
+          </Grid2>
+          <Grid2 container justifyContent={"space-between"} alignItems={"center"} sx={{ marginTop: "8px"}}>
+            <Grid2 container gap={1}>
+              <Button
+                variant="contained"
+                sx={{
+                  padding: 0,
+                  minWidth: "25px",
+                  textAlign: "center",
+                  verticalAlign: "middle",
+                  height: "25px",
+                }}
+              >
+                <Typography>−</Typography>
+              </Button>
+              <Typography>{quantity}</Typography>
 
-            <Button
-              onClick={() => addToCart(cartItem)}
-              variant="contained"
-              sx={{
-                padding: 0,
-                minWidth: "25px",
-                textAlign: "center",
-                verticalAlign: "middle",
-                height: "25px",
-              }}
-            >
-              <Typography>+</Typography>
-            </Button>
+              <Button
+                onClick={() => addToCart(cartItem)}
+                variant="contained"
+                sx={{
+                  padding: 0,
+                  minWidth: "25px",
+                  textAlign: "center",
+                  verticalAlign: "middle",
+                  height: "25px",
+                }}
+              >
+                <Typography>+</Typography>
+              </Button>
+            </Grid2>
+            <Grid2>
+              <IconButton>
+                <DeleteIcon sx={{color: "secondary.main"}} />
+              </IconButton>
+            </Grid2>
           </Grid2>
         </Grid2>
         {/* <Grid2 sx={{ width: "20%" }}>
