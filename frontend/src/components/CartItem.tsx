@@ -10,8 +10,8 @@ interface CartItemProps {
 }
 
 export default function CartItem({ cartItem }: CartItemProps) {
-  const { image_link, brand, title, pieces, price, quantity } = cartItem;
-  const { addToCart } = useContext(CartContext);
+  const { image_link, brand, title, pieces, price, quantity, _id } = cartItem;
+  const { addToCart, decreaseAmount, removeItem } = useContext(CartContext);
 
   return (
     <Grid2
@@ -62,6 +62,7 @@ export default function CartItem({ cartItem }: CartItemProps) {
           <Grid2 container justifyContent={"space-between"} alignItems={"center"} sx={{ marginTop: "8px"}}>
             <Grid2 container gap={1}>
               <Button
+                onClick={() => decreaseAmount(cartItem)}
                 variant="contained"
                 sx={{
                   padding: 0,
@@ -90,7 +91,7 @@ export default function CartItem({ cartItem }: CartItemProps) {
               </Button>
             </Grid2>
             <Grid2>
-              <IconButton>
+              <IconButton onClick={() => removeItem(_id)}>
                 <DeleteIcon sx={{color: "secondary.main"}} />
               </IconButton>
             </Grid2>

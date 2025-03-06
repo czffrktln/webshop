@@ -33,3 +33,9 @@ export interface CartItemType {
   image_link: string;
   quantity?: number
 }
+
+// export interface CartItemType {
+//   puzzle: PuzzleType
+//   quantity: number
+// }
+
