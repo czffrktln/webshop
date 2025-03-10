@@ -65,6 +65,7 @@ export default function Header() {
   };
   const handleCloseModal = () => {
     setOpen(false);
+    reset()
   };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
