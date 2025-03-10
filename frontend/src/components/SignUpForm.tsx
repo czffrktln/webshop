@@ -1,0 +1,104 @@
+import {
+  Button,
+  Divider,
+  FormControl,
+  FormLabel,
+  TextField,
+  Typography,
+  Link,
+} from "@mui/material";
+import GoogleIcon from "@mui/icons-material/Google";
+import { googleLoginUrl } from "../utils/constants";
+import { Controller, useFormContext } from "react-hook-form";
+
+interface SignUpFormPropsType {
+  emailError: boolean;
+}
+
+export default function SignUpForm({ emailError }: SignUpFormPropsType) {
+  const { control, formState } = useFormContext();
+  return (
+    <>
+      <Typography variant="h6">SIGN UP</Typography>
+      <Controller
+        name="name"
+        control={control}
+        render={({ field }) => (
+          <FormControl sx={{ width: "90%", marginBottom: "10px" }}>
+            <FormLabel>Name</FormLabel>
+            <TextField
+              size="small"
+              {...field}
+              required
+              sx={{ width: "100%" }}
+              error={!!formState.errors.name}
+              helperText={formState.errors.name?.message?.toString()}
+              color={formState.errors.name ? "error" : "primary"}
+            />
+          </FormControl>
+        )}
+      />
+      <Controller
+        name="email"
+        control={control}
+        render={({ field }) => (
+          <FormControl sx={{ width: "90%", marginBottom: "10px" }}>
+            <FormLabel>Email</FormLabel>
+            <TextField
+              size="small"
+              {...field}
+              required
+              type="email"
+              error={!!formState.errors.email}
+              helperText={formState.errors.email?.message?.toString()}
+              color={formState.errors.email ? "error" : "primary"}
+            />
+            {emailError && (
+              <Typography variant="caption" color="secondary.main">
+                This email address has already been used
+              </Typography>
+            )}
+          </FormControl>
+        )}
+      />
+      <Controller
+        name="password"
+        control={control}
+        render={({ field }) => (
+          <FormControl sx={{ width: "90%", marginBottom: "10px" }}>
+            <FormLabel>Password</FormLabel>
+            <TextField
+              size="small"
+              {...field}
+              required
+              type="password"
+              error={!!formState.errors.password}
+              helperText={formState.errors.password?.message?.toString()}
+              color={formState.errors.password ? "error" : "primary"}
+            />
+          </FormControl>
+        )}
+      />
+
+      <Button variant="contained" type="submit" sx={{ marginBottom: "10px" }}>
+        SIGN UP
+      </Button>
+      <Divider sx={{ width: "90%", marginBottom: "10px" }}>
+        <Typography variant="caption">OR</Typography>
+      </Divider>
+      <Link href={googleLoginUrl}>
+        <Button
+          startIcon={<GoogleIcon sx={{ color: "secondary.main" }} />}
+          variant="contained"
+          sx={{ marginBottom: "10px" }}
+        >
+          Sign in with Google
+        </Button>
+      </Link>
+
+      <Typography variant="caption">
+        <a href="#">SIGN IN</a>
+      </Typography>
+    </>
+  );
+}

@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 import { UserContext } from "../context/UserContext";
 import { CartContext } from "../context/CartContext";
 // import { googleLoginUrl } from "../utils/constants";
@@ -18,39 +18,39 @@ import {
   IconButton,
   Badge,
   Modal,
-  FormControl,
-  TextField,
-  InputLabel,
-  FormLabel,
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ExtensionIcon from "@mui/icons-material/Extension";
 import PersonIcon from "@mui/icons-material/Person";
 import axios, { AxiosError } from "axios";
+import { decodeToken } from "../utils/decodeToken";
+import SignUpForm from "./SignUpForm";
 
 const UserRegistrationFormSchema = z.object({
-  name: z.string().min(2, 'Name should be at least 2 characters'),
-  email: z.string().email('Email format is not correct').transform((value) => value.toLowerCase()),
-  password: z.string().min(6, 'Password should be at least 6 characters')
+  name: z.string().min(2, "Name should be at least 2 characters"),
+  email: z
+    .string()
+    .email("Email format is not correct")
+    .transform((value) => value.toLowerCase()),
+  password: z.string().min(6, "Password should be at least 6 characters"),
 });
 
 type UserRegistrationFormType = z.infer<typeof UserRegistrationFormSchema>;
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   maxWidth: 500,
   // width: 400,
-  bgcolor: 'background.paper',
+  bgcolor: "background.paper",
   // border: '2px solid #000',
   boxShadow: 24,
   padding: 4,
   // display:"flex" ,
   // flexDirection: "column",
   // justifyContent: "center",
-  
 };
 
 export default function Header() {
@@ -59,13 +59,14 @@ export default function Header() {
   const { numberOfItems, setCart } = useContext(CartContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState(false);
-  const [ emailError, setEmailError ] = useState(false)
+  const [emailError, setEmailError] = useState(false);
+
   const handleOpen = () => {
     setOpen(true);
   };
   const handleCloseModal = () => {
     setOpen(false);
-    reset()
+    reset();
   };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -79,44 +80,49 @@ export default function Header() {
   const handleLogout = () => {
     setAnchorEl(null);
     setUser(null);
-    setCart([])
-    sessionStorage.removeItem("cart")
-    sessionStorage.removeItem("token")
+    setCart([]);
+    sessionStorage.removeItem("cart");
+    sessionStorage.removeItem("token");
     navigate("/");
   };
 
-  const {control, handleSubmit, formState, reset, watch} = useForm<UserRegistrationFormType>({
+  const methods = useForm<UserRegistrationFormType>({
     defaultValues: {
-      name: "", 
+      name: "",
       email: "",
-      password: ""
+      password: "",
     },
-    resolver: zodResolver(UserRegistrationFormSchema)
-  })
+    resolver: zodResolver(UserRegistrationFormSchema),
+  });
 
-  const watchEmail = watch("email")
+  const { handleSubmit, reset, watch } = methods;
+
+  const watchEmail = watch("email");
 
   const onNewUserSubmit = async (data: UserRegistrationFormType) => {
     console.log("data", data);
     try {
-      const response = await axios.post("http://localhost:3000/user/registration", {
-        data
-      })
+      const response = await axios.post(
+        "http://localhost:3000/user/registration",
+        {
+          data,
+        }
+      );
       console.log("response", response);
-      reset()
-      handleCloseModal()
-
-    }
-    catch (error) {
-      if (error.status === 403) setEmailError(true)
+      sessionStorage.setItem("token", response.data);
+      setUser(decodeToken(response.data));
+      reset();
+      handleCloseModal();
+    } catch (error: any) {
+      if (error.status === 403) setEmailError(true);
       console.log(error);
     }
     // if (response.status === 403) console.log("haha");
   };
 
   useEffect(() => {
-    setEmailError(false)
-  }, [watchEmail])
+    setEmailError(false);
+  }, [watchEmail]);
 
   return (
     <AppBar>
@@ -131,7 +137,13 @@ export default function Header() {
           </Typography>
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1, sm: 3, md: 4 } }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: { xs: 1, sm: 3, md: 4 },
+          }}
+        >
           <IconButton
             sx={{ color: "primary.contrastText" }}
             onClick={() => navigate("/cart")}
@@ -173,9 +185,7 @@ export default function Header() {
               </Menu>
             </Box>
           ) : (
-            // <Link href={googleLoginUrl}>
             <>
-        
               <Button
                 onClick={handleOpen}
                 variant="text"
@@ -188,106 +198,25 @@ export default function Header() {
               >
                 Login
               </Button>
-              <Modal
-                open={open}
-                onClose={handleCloseModal}
-                // sx={{maxWidth: 400}}
-              >
-                <Box 
-                  
-                  component="form" 
+              <Modal open={open} onClose={handleCloseModal}>
+                <Box
+                  component="form"
+                  noValidate
                   onSubmit={handleSubmit(onNewUserSubmit)}
-                  sx={{...style, 
-                  width: 400, 
-                  display: "flex", 
-                  flexDirection: "column", 
-                  // justifyContent: "center",
-                  alignItems: "center",
-
-                }}>
-                  {/* <Box>
-                    <Typography>LOGIN</Typography>
-                  <Typography variant="caption">REGISTRATION</Typography>
-   
-
-                  </Box> */}
-
-    
-                  <Typography variant="h6">SIGN UP</Typography>
-                  <Controller
-                    name="name"
-                    control={control}
-                    render={({field}) => (
-                      <FormControl
-                        sx={{ width: "90%"}}
-                      >
-                        <FormLabel>Name</FormLabel>
-                        <TextField 
-                          {...field}
-                          required
-                          // fullWidth
-                          sx={{ width: "100%" }}
-                          error={!!formState.errors.name}
-                          helperText={formState.errors.name?.message?.toString()}
-                          color={formState.errors.name ? 'error' : 'primary'}
-                        />
-                      </FormControl>
-
-                    )}
-                  />
-                  <Controller
-                    name="email"
-                    control={control}
-                    render={({field}) => (
-                      <FormControl
-                        sx={{ width: "90%"}}
-                      >
-                        <FormLabel>Email</FormLabel>
-                        <TextField 
-                          {...field}
-                          required
-                          type="email"
-                          error={!!formState.errors.email}
-                          helperText={formState.errors.email?.message?.toString()}
-                          color={formState.errors.email ? 'error' : 'primary'}
-                        />
-                        { emailError && 
-                        <Typography variant="caption" color="secondary.main">This email address has already been used</Typography> }
-                      </FormControl>
-
-                    )}
-                  />
-                  <Controller
-                    name="password"
-                    control={control}
-                    render={({field}) => (
-                      <FormControl
-                      sx={{ width: "90%"}}
-                      >
-                        <FormLabel>Password</FormLabel>
-                        <TextField 
-                          {...field}
-                          required
-                          type="password"
-                          error={!!formState.errors.password}
-                          helperText={formState.errors.password?.message?.toString()}
-                          color={formState.errors.password ? 'error' : 'primary'}
-                        />
-                      </FormControl>
-
-                    )}
-                  />
-
-                  
-                  <Button variant="contained" type="submit">SIGN UP</Button>
-                  <Typography variant="caption">SIGN IN</Typography>
-
-          
-    
+                  sx={{
+                    ...style,
+                    width: 400,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <FormProvider {...methods}>
+                    <SignUpForm emailError={emailError} />
+                  </FormProvider>
                 </Box>
               </Modal>
-            {/* // </Link> */}
-                </>
+            </>
           )}
         </Box>
       </Toolbar>
