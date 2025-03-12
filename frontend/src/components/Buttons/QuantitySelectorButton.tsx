@@ -1,7 +1,7 @@
 import { Button, Grid2, Typography } from "@mui/material";
 import { useContext } from "react";
-import { CartContext } from "../context/CartContext";
-import { CartItemType } from "../types";
+import { CartContext } from "../../context/CartContext";
+import { CartItemType } from "../../types";
 
 interface QuantitySelectorButtonPropsType {
   cartItem: CartItemType;

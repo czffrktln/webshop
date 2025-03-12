@@ -47,7 +47,7 @@ export default function Header() {
   };
   const handleCloseModal = () => {
     setOpen(false);
-    // reset();
+    setIsNewUserLogin(false);
   };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {

@@ -26,12 +26,16 @@ interface SignUpFormPropsType {
 }
 
 export const UserRegistrationFormSchema = z.object({
-  name: z.string().min(2, "Name should be at least 2 characters"),
+  name: z.string().trim().min(2, "Name should be at least 2 characters"),
   email: z
     .string()
+    .trim()
     .email("Email format is not correct")
     .transform((value) => value.toLowerCase()),
-  password: z.string().min(6, "Password should be at least 6 characters"),
+  password: z
+    .string()
+    .trim()
+    .min(6, "Password should be at least 6 characters"),
 });
 
 export type UserRegistrationFormType = z.infer<

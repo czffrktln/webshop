@@ -1,10 +1,10 @@
-import { Button, Grid2, IconButton, Typography } from "@mui/material";
+import { Grid2, IconButton, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { CartContext } from "../context/CartContext";
 import { useContext } from "react";
 import { CartItemType } from "../types";
-import QuantitySelectorButton from "./QuantitySelectorButton";
+import QuantitySelectorButton from "./Buttons/QuantitySelectorButton";
 
 interface CartItemProps {
   cartItem: CartItemType;
