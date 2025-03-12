@@ -18,13 +18,13 @@ import { decodeToken } from "../utils/decodeToken";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
 
-interface SignUpFormPropsType {
+interface SignInFormPropsType {
   handleCloseModal: () => void;
   style: {};
   setIsNewUserLogin: (value: boolean) => void;
 }
 
-export const UserRegistrationFormSchema = z.object({
+export const UserLoginFormSchema = z.object({
   name: z.string().min(2, "Name should be at least 2 characters"),
   email: z
     .string()
@@ -33,39 +33,33 @@ export const UserRegistrationFormSchema = z.object({
   password: z.string().min(6, "Password should be at least 6 characters"),
 });
 
-export type UserRegistrationFormType = z.infer<
-  typeof UserRegistrationFormSchema
->;
+export type UserLoginFormType = z.infer<typeof UserLoginFormSchema>;
 
-export default function SignUpForm({
+export default function LoginForm({
   style,
   handleCloseModal,
   setIsNewUserLogin,
-}: SignUpFormPropsType) {
+}: SignInFormPropsType) {
   const [emailError, setEmailError] = useState(false);
   const { setUser } = useContext(UserContext);
 
   const { control, formState, handleSubmit, reset, watch } =
-    useForm<UserRegistrationFormType>({
+    useForm<UserLoginFormType>({
       defaultValues: {
-        name: "",
         email: "",
         password: "",
       },
-      resolver: zodResolver(UserRegistrationFormSchema),
+      resolver: zodResolver(UserLoginFormSchema),
     });
 
   const watchEmail = watch("email");
 
-  const onNewUserSubmit = async (data: UserRegistrationFormType) => {
+  const onLoginSubmit = async (data: UserLoginFormType) => {
     console.log("data", data);
     try {
-      const response = await axios.post(
-        "http://localhost:3000/user/registration",
-        {
-          data,
-        }
-      );
+      const response = await axios.post("http://localhost:3000/user/login", {
+        data,
+      });
       console.log("response", response);
       sessionStorage.setItem("token", response.data);
       setUser(decodeToken(response.data));
@@ -86,7 +80,7 @@ export default function SignUpForm({
       <Box
         component="form"
         noValidate
-        onSubmit={handleSubmit(onNewUserSubmit)}
+        onSubmit={handleSubmit(onLoginSubmit)}
         sx={{
           ...style,
           width: 400,
@@ -95,25 +89,8 @@ export default function SignUpForm({
           alignItems: "center",
         }}
       >
-        <Typography variant="h6">SIGN UP</Typography>
-        <Controller
-          name="name"
-          control={control}
-          render={({ field }) => (
-            <FormControl sx={{ width: "90%", marginBottom: "10px" }}>
-              <FormLabel>Name</FormLabel>
-              <TextField
-                size="small"
-                {...field}
-                required
-                sx={{ width: "100%" }}
-                error={!!formState.errors.name}
-                helperText={formState.errors.name?.message?.toString()}
-                color={formState.errors.name ? "error" : "primary"}
-              />
-            </FormControl>
-          )}
-        />
+        <Typography variant="h6">SIGN IN</Typography>
+
         <Controller
           name="email"
           control={control}
@@ -157,7 +134,7 @@ export default function SignUpForm({
         />
 
         <Button variant="contained" type="submit" sx={{ marginBottom: "10px" }}>
-          SIGN UP
+          LOGIN
         </Button>
         <Divider sx={{ width: "90%", marginBottom: "10px" }}>
           <Typography variant="caption">OR</Typography>
@@ -183,9 +160,9 @@ export default function SignUpForm({
                 color: "secondary.main",
               },
             }}
-            onClick={() => setIsNewUserLogin(false)}
+            onClick={() => setIsNewUserLogin(true)}
           >
-            SIGN IN
+            SIGN UP
           </Button>
         </Typography>
       </Box>

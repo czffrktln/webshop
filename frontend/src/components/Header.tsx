@@ -21,6 +21,7 @@ import ExtensionIcon from "@mui/icons-material/Extension";
 import PersonIcon from "@mui/icons-material/Person";
 
 import SignUpForm from "./SignUpForm";
+import LoginForm from "./LoginForm";
 
 const style = {
   position: "absolute",
@@ -38,7 +39,8 @@ export default function Header() {
   const { user, setUser } = useContext(UserContext);
   const { numberOfItems, setCart } = useContext(CartContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [isNewUserLogin, setIsNewUserLogin] = useState<boolean>(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -140,7 +142,21 @@ export default function Header() {
                 Login
               </Button>
               <Modal open={open} onClose={handleCloseModal}>
-                <SignUpForm style={style} handleCloseModal={handleCloseModal} />
+                <>
+                  {isNewUserLogin ? (
+                    <SignUpForm
+                      style={style}
+                      handleCloseModal={handleCloseModal}
+                      setIsNewUserLogin={setIsNewUserLogin}
+                    />
+                  ) : (
+                    <LoginForm
+                      style={style}
+                      handleCloseModal={handleCloseModal}
+                      setIsNewUserLogin={setIsNewUserLogin}
+                    />
+                  )}
+                </>
               </Modal>
             </>
           )}
