@@ -1,18 +1,15 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Controller, FormProvider, useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import { UserContext } from "../context/UserContext";
 import { CartContext } from "../context/CartContext";
-// import { googleLoginUrl } from "../utils/constants";
+
 import {
   AppBar,
   Toolbar,
   Typography,
   Button,
   Box,
-  Link,
   Menu,
   MenuItem,
   IconButton,
@@ -22,20 +19,8 @@ import {
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ExtensionIcon from "@mui/icons-material/Extension";
 import PersonIcon from "@mui/icons-material/Person";
-import axios, { AxiosError } from "axios";
-import { decodeToken } from "../utils/decodeToken";
+
 import SignUpForm from "./SignUpForm";
-
-const UserRegistrationFormSchema = z.object({
-  name: z.string().min(2, "Name should be at least 2 characters"),
-  email: z
-    .string()
-    .email("Email format is not correct")
-    .transform((value) => value.toLowerCase()),
-  password: z.string().min(6, "Password should be at least 6 characters"),
-});
-
-type UserRegistrationFormType = z.infer<typeof UserRegistrationFormSchema>;
 
 const style = {
   position: "absolute",
@@ -43,14 +28,9 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   maxWidth: 500,
-  // width: 400,
   bgcolor: "background.paper",
-  // border: '2px solid #000',
   boxShadow: 24,
   padding: 4,
-  // display:"flex" ,
-  // flexDirection: "column",
-  // justifyContent: "center",
 };
 
 export default function Header() {
@@ -59,14 +39,13 @@ export default function Header() {
   const { numberOfItems, setCart } = useContext(CartContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState(false);
-  const [emailError, setEmailError] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
   };
   const handleCloseModal = () => {
     setOpen(false);
-    reset();
+    // reset();
   };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -85,44 +64,6 @@ export default function Header() {
     sessionStorage.removeItem("token");
     navigate("/");
   };
-
-  const methods = useForm<UserRegistrationFormType>({
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-    },
-    resolver: zodResolver(UserRegistrationFormSchema),
-  });
-
-  const { handleSubmit, reset, watch } = methods;
-
-  const watchEmail = watch("email");
-
-  const onNewUserSubmit = async (data: UserRegistrationFormType) => {
-    console.log("data", data);
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/user/registration",
-        {
-          data,
-        }
-      );
-      console.log("response", response);
-      sessionStorage.setItem("token", response.data);
-      setUser(decodeToken(response.data));
-      reset();
-      handleCloseModal();
-    } catch (error: any) {
-      if (error.status === 403) setEmailError(true);
-      console.log(error);
-    }
-    // if (response.status === 403) console.log("haha");
-  };
-
-  useEffect(() => {
-    setEmailError(false);
-  }, [watchEmail]);
 
   return (
     <AppBar>
@@ -199,22 +140,7 @@ export default function Header() {
                 Login
               </Button>
               <Modal open={open} onClose={handleCloseModal}>
-                <Box
-                  component="form"
-                  noValidate
-                  onSubmit={handleSubmit(onNewUserSubmit)}
-                  sx={{
-                    ...style,
-                    width: 400,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <FormProvider {...methods}>
-                    <SignUpForm emailError={emailError} />
-                  </FormProvider>
-                </Box>
+                <SignUpForm style={style} handleCloseModal={handleCloseModal} />
               </Modal>
             </>
           )}
