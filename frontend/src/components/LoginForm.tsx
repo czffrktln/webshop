@@ -89,7 +89,7 @@ export default function LoginForm({
           alignItems: "center",
         }}
       >
-        <Typography variant="h6">SIGN IN</Typography>
+        <Typography variant="h6">LOGIN</Typography>
 
         <Controller
           name="email"
@@ -145,7 +145,7 @@ export default function LoginForm({
             variant="contained"
             sx={{ marginBottom: "10px" }}
           >
-            Sign in with Google
+            Login with Google
           </Button>
         </Link>
 

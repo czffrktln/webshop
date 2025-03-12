@@ -168,7 +168,7 @@ export default function SignUpForm({
             variant="contained"
             sx={{ marginBottom: "10px" }}
           >
-            Sign in with Google
+            Login with Google
           </Button>
         </Link>
 
@@ -185,7 +185,7 @@ export default function SignUpForm({
             }}
             onClick={() => setIsNewUserLogin(false)}
           >
-            SIGN IN
+            LOGIN
           </Button>
         </Typography>
       </Box>
