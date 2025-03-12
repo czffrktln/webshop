@@ -18,6 +18,8 @@ import { decodeToken } from "../utils/decodeToken";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
 
+import LoginSignUpToggleButton from "./Buttons/LoginSignUpToggleButton";
+
 interface SignInFormPropsType {
   handleCloseModal: () => void;
   style: {};
@@ -150,20 +152,11 @@ export default function LoginForm({
         </Link>
 
         <Typography variant="caption">
-          <Button
-            sx={{
-              color: "primary.main",
-              textDecoration: "underline",
-              backgroundColor: "transparent",
-              "&:hover": {
-                textDecoration: "underline",
-                color: "secondary.main",
-              },
-            }}
-            onClick={() => setIsNewUserLogin(true)}
-          >
-            SIGN UP
-          </Button>
+          <LoginSignUpToggleButton
+            buttonText={"Sign Up"}
+            setIsNewUserLogin={setIsNewUserLogin}
+            isNewUserLoginValue={true}
+          />
         </Typography>
       </Box>
     </>

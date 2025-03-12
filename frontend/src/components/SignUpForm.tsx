@@ -17,6 +17,7 @@ import { useContext, useEffect, useState } from "react";
 import { decodeToken } from "../utils/decodeToken";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
+import LoginSignUpToggleButton from "./Buttons/LoginSignUpToggleButton";
 
 interface SignUpFormPropsType {
   handleCloseModal: () => void;
@@ -173,20 +174,11 @@ export default function SignUpForm({
         </Link>
 
         <Typography variant="caption">
-          <Button
-            sx={{
-              color: "primary.main",
-              textDecoration: "underline",
-              backgroundColor: "transparent",
-              "&:hover": {
-                textDecoration: "underline",
-                color: "secondary.main",
-              },
-            }}
-            onClick={() => setIsNewUserLogin(false)}
-          >
-            LOGIN
-          </Button>
+          <LoginSignUpToggleButton
+            buttonText={"Login"}
+            setIsNewUserLogin={setIsNewUserLogin}
+            isNewUserLoginValue={false}
+          />
         </Typography>
       </Box>
     </>
