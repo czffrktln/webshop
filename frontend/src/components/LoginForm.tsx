@@ -27,7 +27,6 @@ interface SignInFormPropsType {
 }
 
 export const UserLoginFormSchema = z.object({
-  name: z.string().trim().min(2, "Name should be at least 2 characters"),
   email: z
     .string()
     .trim()
@@ -43,7 +42,7 @@ export default function LoginForm({
   handleCloseModal,
   setIsNewUserLogin,
 }: SignInFormPropsType) {
-  const [emailError, setEmailError] = useState(false);
+  const [authenticationError, setAuthenticationError] = useState(false);
   const { setUser } = useContext(UserContext);
 
   const { control, formState, handleSubmit, reset, watch } =
@@ -56,6 +55,7 @@ export default function LoginForm({
     });
 
   const watchEmail = watch("email");
+  const watchPassword = watch("password");
 
   const onLoginSubmit = async (data: UserLoginFormType) => {
     console.log("data", data);
@@ -63,20 +63,20 @@ export default function LoginForm({
       const response = await axios.post("http://localhost:3000/user/login", {
         data,
       });
-      console.log("response", response);
+      console.log("loginos response", response);
       sessionStorage.setItem("token", response.data);
       setUser(decodeToken(response.data));
       reset();
       handleCloseModal();
     } catch (error: any) {
-      if (error.status === 403) setEmailError(true);
+      if (error.status === 403) setAuthenticationError(true);
       console.log(error);
     }
   };
 
   useEffect(() => {
-    setEmailError(false);
-  }, [watchEmail]);
+    setAuthenticationError(false);
+  }, [watchEmail, watchPassword]);
 
   return (
     <>
@@ -109,11 +109,6 @@ export default function LoginForm({
                 helperText={formState.errors.email?.message?.toString()}
                 color={formState.errors.email ? "error" : "primary"}
               />
-              {emailError && (
-                <Typography variant="caption" color="secondary.main">
-                  This email address has already been used
-                </Typography>
-              )}
             </FormControl>
           )}
         />
@@ -132,6 +127,11 @@ export default function LoginForm({
                 helperText={formState.errors.password?.message?.toString()}
                 color={formState.errors.password ? "error" : "primary"}
               />
+              {authenticationError && (
+                <Typography variant="caption" color="secondary.main">
+                  Invalid email or password.
+                </Typography>
+              )}
             </FormControl>
           )}
         />
