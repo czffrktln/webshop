@@ -26,7 +26,11 @@ type CartProviderProps = {
 };
 
 export function CartProvider({ children }: CartProviderProps) {
-  const [cart, setCart] = useState<CartItemType[] | []>([]);
+  const savedCart = sessionStorage.getItem("cart");
+
+  const [cart, setCart] = useState<CartItemType[] | []>(
+    savedCart ? JSON.parse(savedCart) : []
+  );
   const [numberOfItems, setNumberOfItems] = useState<number | null>(null);
 
   useEffect(() => {
