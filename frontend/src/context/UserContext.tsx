@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { decodeToken } from "../utils/decodeToken";
 
 import { UserType } from "../types";
@@ -33,4 +33,8 @@ export function UserProvider({ children }: UserProviderProps) {
       {children}
     </UserContext.Provider>
   );
+}
+
+export function useUserContext() {
+  return useContext(UserContext)
 }

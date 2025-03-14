@@ -8,7 +8,7 @@ import { useContext } from "react";
 import CartItem from "../components/CartItem";
 
 export default function Cart() {
-  const { cart } = useContext(CartContext);
+  const { cart, total } = useContext(CartContext);
 
   return (
     <Container sx={{ marginTop: { xs: "80px", sm: "100px" }, height: "100vh" }}>
@@ -27,7 +27,7 @@ export default function Cart() {
             Order Summary
           </Typography>
           <Typography>
-            Subtotal: valami
+            Subtotal: {total} HUF
           </Typography>
         </Grid2>
       </Grid2>

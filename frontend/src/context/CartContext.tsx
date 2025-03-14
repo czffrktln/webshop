@@ -8,6 +8,7 @@ interface CartContextType {
   decreaseAmount: (item: CartItemType) => void;
   removeItem: (id: string) => void;
   numberOfItems: number | null;
+  total: number
 }
 
 const defaultState: CartContextType = {
@@ -17,6 +18,7 @@ const defaultState: CartContextType = {
   decreaseAmount: () => [],
   removeItem: () => [],
   numberOfItems: null,
+  total: 0
 };
 
 export const CartContext = createContext(defaultState);
@@ -32,6 +34,9 @@ export function CartProvider({ children }: CartProviderProps) {
     savedCart ? JSON.parse(savedCart) : []
   );
   const [numberOfItems, setNumberOfItems] = useState<number | null>(null);
+  const [ total, setTotal ] = useState<number>(0)
+  console.log(cart);
+  
 
   useEffect(() => {
     const totalCartItems = cart.reduce<number>((acc, currentValue) => {
@@ -42,7 +47,17 @@ export function CartProvider({ children }: CartProviderProps) {
     }, 0);
     setNumberOfItems(totalCartItems);
     sessionStorage.setItem("cart", JSON.stringify(cart));
+
+    const totalAmount = cart.reduce<number>((acc, currentValue) => {
+      if (typeof currentValue.quantity !== "undefined") {
+        acc += Number(currentValue.price) * currentValue.quantity
+      }
+      return acc
+    }, 0)
+    setTotal(totalAmount)
   }, [cart]);
+
+ 
 
   const addToCart = (puzzle: CartItemType) => {
     const puzzleIndex = cart.findIndex((item) => item._id === puzzle._id);
@@ -94,6 +109,7 @@ export function CartProvider({ children }: CartProviderProps) {
         numberOfItems,
         decreaseAmount,
         removeItem,
+        total
       }}
     >
       {children}
