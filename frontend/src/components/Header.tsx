@@ -68,7 +68,7 @@ export default function Header() {
   };
 
   return (
-    <AppBar>
+    <AppBar sx={{ position: "static"}}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box
           onClick={() => navigate("/")}

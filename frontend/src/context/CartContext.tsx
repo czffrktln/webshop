@@ -35,9 +35,7 @@ export function CartProvider({ children }: CartProviderProps) {
   );
   const [numberOfItems, setNumberOfItems] = useState<number | null>(null);
   const [ total, setTotal ] = useState<number>(0)
-  console.log(cart);
   
-
   useEffect(() => {
     const totalCartItems = cart.reduce<number>((acc, currentValue) => {
       if (typeof currentValue.quantity !== "undefined") {
