@@ -20,7 +20,6 @@ export default function CardComponents({ puzzle }: PuzzleProps) {
       sx={{
         cursor: "pointer",
         width: "300px",
-        // height: "350px",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

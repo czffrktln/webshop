@@ -1,13 +1,4 @@
-import {
-  Button,
-  Divider,
-  FormControl,
-  FormLabel,
-  TextField,
-  Typography,
-  Link,
-  Box,
-} from "@mui/material";
+import { Button, Divider, FormControl, FormLabel, TextField, Typography, Link, Box } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import { googleLoginUrl } from "../utils/constants";
 import { Controller, useForm } from "react-hook-form";
