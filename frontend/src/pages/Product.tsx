@@ -1,28 +1,34 @@
-import { useContext } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { PuzzleContext } from "../context/PuzzleContext";
 import { Box, Button, Container, Grid2, Typography } from "@mui/material";
+import axios from "axios";
+import { PuzzleType } from "../types";
+
 
 export default function Product() {
+
   const { id } = useParams();
-  const { puzzleList } = useContext(PuzzleContext);
+  const [ currentPuzzle, setCurrentPuzzle ] = useState<PuzzleType| null >(null)
+ 
 
-  const [currentPuzzle] = puzzleList.filter((puzzle) => puzzle._id === id);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/puzzle/${id}`)
+      .then((response) => {
+        console.log("response", response.data);
+        
+        setCurrentPuzzle(response.data);
+      })
 
-  const {
-    title,
-    image_link,
-    serial_number,
-    brand,
-    pieces,
-    price,
-    size,
-    available,
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
 
-    rating,
-  } = currentPuzzle;
 
   return (
+    <>
+    { currentPuzzle && 
     <Container sx={{ marginTop: "100px" }}>
       <Grid2
         container
@@ -32,7 +38,7 @@ export default function Product() {
       >
         <Grid2 size={{ xs: 12, sm: 6 }}>
           <img
-            src={image_link}
+            src={currentPuzzle.image_link}
             style={{
               objectFit: "contain",
               maxWidth: "100%",
@@ -56,16 +62,16 @@ export default function Product() {
           {/* //width: "45%" */}
           <Box sx={{ width: "100%" }}>
             <Typography variant="h4" fontSize="2.5rem">
-              {title} - {pieces} pieces
+              {currentPuzzle.title} - {currentPuzzle.pieces} pieces
             </Typography>
-            <Typography variant="h5">Brand: {brand}</Typography>
+            <Typography variant="h5">Brand: {currentPuzzle.brand}</Typography>
             <Typography>
-              Rating: {rating ? "⭐".repeat(Number(rating)) : "No rating yet"}
+              Rating: {currentPuzzle.rating ? "⭐".repeat(Number(currentPuzzle.rating)) : "No rating yet"}
             </Typography>
-            <Typography>Size: {size}</Typography>
-            <Typography>Serial no.: {serial_number}</Typography>
-            <Typography>{available ? "In stock" : "Out of stock"}</Typography>
-            <Typography fontWeight="bold">{price} Ft</Typography>
+            <Typography>Size: {currentPuzzle.size}</Typography>
+            <Typography>Serial no.: {currentPuzzle.serial_number}</Typography>
+            <Typography>{currentPuzzle.available ? "In stock" : "Out of stock"}</Typography>
+            <Typography fontWeight="bold">{currentPuzzle.price} Ft</Typography>
           </Box>
           <Box
             sx={{
@@ -80,5 +86,7 @@ export default function Product() {
         </Grid2>
       </Grid2>
     </Container>
+  }
+  </>
   );
 }

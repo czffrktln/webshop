@@ -5,6 +5,7 @@ import { CartContext } from "../context/CartContext";
 import { useContext } from "react";
 import { CartItemType } from "../types";
 import QuantitySelectorButton from "./Buttons/QuantitySelectorButton";
+import { Link } from "react-router-dom";
 
 interface CartItemProps {
   cartItem: CartItemType;
@@ -33,15 +34,17 @@ export default function CartItem({ cartItem }: CartItemProps) {
         justifyContent="center"
         alignItems="center"
       >
-        <img
-          src={image_link}
-          style={{
-            objectFit: "contain",
-            width: "100%",
-            height: "100%",
-            padding: "10px",
-          }}
-        />
+      <Link to={`/product/${_id}`} style={{ width: "100%", height: "100%" }}>
+          <img
+            src={image_link}
+            style={{
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+              padding: "10px",
+            }}
+          />
+        </Link>
       </Grid2>
       <Grid2
         container
@@ -55,9 +58,11 @@ export default function CartItem({ cartItem }: CartItemProps) {
             justifyContent="space-between"
             flexDirection={{ xs: "column", md: "row" }}
           >
-            <Typography sx={{ typography: { xs: "subtitle2", sm: "h6" } }}>
-              {title}
-            </Typography>
+            <Link to={`/product/${_id}`} style={{textDecoration: "none", color: "black" }}>
+              <Typography sx={{ typography: { xs: "subtitle2", sm: "h6" }}}>
+                {title}
+              </Typography>
+            </Link>
             <Typography sx={{ typography: { xs: "subtitle2", sm: "h6" } }}>
               <strong>{price} HUF</strong>
             </Typography>

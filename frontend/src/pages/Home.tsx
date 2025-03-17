@@ -8,8 +8,10 @@ export default function Home() {
   const { puzzleList, setPuzzleList } = useContext(PuzzleContext);
 
   useEffect(() => {
+    console.log("puzzle lekeres fut");
+    
     axios
-      .get("http://localhost:3000/")
+      .get("http://localhost:3000/puzzle")
       .then((response) => {
         setPuzzleList(response.data);
       })
