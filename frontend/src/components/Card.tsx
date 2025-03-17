@@ -9,8 +9,7 @@ interface PuzzleProps {
 }
 
 export default function CardComponents({ puzzle }: PuzzleProps) {
-  const { title, image_link, brand, price, _id, pieces, serial_number } =
-    puzzle;
+  const { title, image_link, brand, price, _id } = puzzle;
   const { addToCart } = useContext(CartContext);
   const navigate = useNavigate();
 
@@ -67,15 +66,7 @@ export default function CardComponents({ puzzle }: PuzzleProps) {
         <Button
           variant="contained"
           onClick={() =>
-            addToCart({
-              title,
-              image_link,
-              brand,
-              price,
-              _id,
-              pieces,
-              serial_number,
-            })
+            addToCart(puzzle)
           }
         >
           Add to cart

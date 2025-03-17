@@ -24,18 +24,7 @@ export interface UserType {
 }
 
 export interface CartItemType {
-  _id: string;
-  brand: string;
-  title: string;
-  pieces: string;
-  serial_number: string;
-  price: string;
-  image_link: string;
-  quantity?: number
+  puzzle: PuzzleType
+  quantity: number
 }
-
-// export interface CartItemType {
-//   puzzle: PuzzleType
-//   quantity: number
-// }
 

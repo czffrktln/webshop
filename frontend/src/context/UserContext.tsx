@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { decodeToken } from "../utils/decodeToken";
 
 import { UserType } from "../types";
@@ -15,11 +15,11 @@ const defaultState: UserContextType = {
 
 export const UserContext = createContext(defaultState);
 
-type UserProviderProps = {
+type UserContextProviderProps = {
   children: React.ReactNode;
 };
 
-export function UserProvider({ children }: UserProviderProps) {
+export function UserProvider({ children }: UserContextProviderProps) {
 
   const [user, setUser] = useState<UserType | null>(null);
 
@@ -35,6 +35,10 @@ export function UserProvider({ children }: UserProviderProps) {
   );
 }
 
-export function useUserContext() {
-  return useContext(UserContext)
-}
+// export function useUserContext() {
+//   const context = useContext(UserContext)
+//   if (!context) {
+//     throw new Error("useUserContext must be used within a UserContextProvider")
+//   }
+//   return context;
+// }

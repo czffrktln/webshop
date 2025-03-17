@@ -22,7 +22,7 @@ export default function Cart() {
           </Typography>
           <Box sx={{ height: "85vh", overflow: "auto", overflowX: "hidden"}}>
             {cart.map((cartItem) => (
-              <CartItem key={cartItem._id} cartItem={cartItem} />
+              <CartItem key={cartItem.puzzle._id} cartItem={cartItem} />
             ))}
           </Box>
         </Grid2>

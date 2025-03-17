@@ -10,7 +10,7 @@ interface QuantitySelectorButtonPropsType {
 export default function QuantitySelectorButton({
   cartItem,
 }: QuantitySelectorButtonPropsType) {
-  const { addToCart, decreaseAmount } = useContext(CartContext);
+  const { increaseAmount, decreaseAmount } = useContext(CartContext);
   const { quantity } = cartItem;
 
   return (
@@ -31,7 +31,7 @@ export default function QuantitySelectorButton({
       <Typography>{quantity}</Typography>
 
       <Button
-        onClick={() => addToCart(cartItem)}
+        onClick={() => increaseAmount(cartItem)}
         variant="contained"
         sx={{
           padding: 0,

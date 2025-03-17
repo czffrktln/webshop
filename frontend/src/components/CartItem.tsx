@@ -11,7 +11,7 @@ interface CartItemProps {
 }
 
 export default function CartItem({ cartItem }: CartItemProps) {
-  const { image_link, brand, title, pieces, price, _id } = cartItem;
+  const { image_link, brand, title, pieces, price, _id } = cartItem.puzzle;
   const { removeItem } = useContext(CartContext);
 
   return (

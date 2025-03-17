@@ -21,7 +21,7 @@ import LoginSignUpToggleButton from "./Buttons/LoginSignUpToggleButton";
 
 interface SignUpFormPropsType {
   handleCloseModal: () => void;
-  style: {};
+  style: object;
   setIsNewUserLogin: (value: boolean) => void;
 }
 
@@ -76,10 +76,13 @@ export default function SignUpForm({
       setUser(decodeToken(response.data));
       reset();
       handleCloseModal();
-    } catch (error: any) {
-      if (error.status === 403) setEmailError(true);
+    } catch (error: unknown) {
+      if (typeof error === "object" && error !== null && "status" in error) {
+        if (error.status === 403) setEmailError(true);
+      }
       console.log(error);
     }
+
   };
 
   useEffect(() => {
