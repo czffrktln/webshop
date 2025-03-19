@@ -1,25 +1,20 @@
-import { useEffect, useContext } from "react";
-import axios from "axios";
+import { useQuery } from '@tanstack/react-query'
+import { getAllPuzzles } from "../api/puzzle.service";
 import CardComponents from "../components/Card";
-import { PuzzleContext } from "../context/PuzzleContext";
+import { PuzzleType } from "../types";
 import { Box } from "@mui/material";
 
 export default function Home() {
-  const { puzzleList, setPuzzleList } = useContext(PuzzleContext);
 
-  useEffect(() => {
-    console.log("puzzle lekeres fut");
-    
-    axios
-      .get("http://localhost:3000/puzzle")
-      .then((response) => {
-        setPuzzleList(response.data);
-      })
+  const { data: puzzleList, error, isError } = useQuery<PuzzleType[]>({
+    queryKey: ['puzzles'],
+    queryFn: () => getAllPuzzles()
+  })
 
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, []);
+  if (isError) {
+    console.log(error);
+    // return <ErrorPage/>
+  } 
 
   return (
     <Box
