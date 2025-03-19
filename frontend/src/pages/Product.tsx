@@ -1,28 +1,24 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Button, Container, Grid2, Typography } from "@mui/material";
-import axios from "axios";
-import { PuzzleType } from "../types";
+import { useQuery } from "@tanstack/react-query";
+import { getCurrentPuzzle } from "../api/puzzle.service";
 import { CartContext } from "../context/CartContext";
+import { PuzzleType } from "../types";
+import { Box, Button, Container, Grid2, Typography } from "@mui/material";
 
 export default function Product() {
   const { id } = useParams();
-  const [currentPuzzle, setCurrentPuzzle] = useState<PuzzleType | null>(null);
   const { addToCart } = useContext(CartContext);
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3000/puzzle/${id}`)
-      .then((response) => {
-        console.log("response", response.data);
+  const { data: currentPuzzle, isError, error } = useQuery<PuzzleType>({
+    queryKey: ['puzzle', id],
+    queryFn: () => getCurrentPuzzle(id!)
+  })
 
-        setCurrentPuzzle(response.data);
-      })
-
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, []);
+  if (isError) {
+    console.log(error);
+    // return <ErrorPage/>
+  } 
 
   return (
     <>
