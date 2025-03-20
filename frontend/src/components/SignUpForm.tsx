@@ -67,7 +67,6 @@ export default function SignUpForm({
     mutationFn: (userData: UserRegistrationFormType) => registerUser(userData),
 
     onSuccess: (response) => {
-      console.log("response", response);
       sessionStorage.setItem("token", response);
       setUser(decodeToken(response));
       reset();

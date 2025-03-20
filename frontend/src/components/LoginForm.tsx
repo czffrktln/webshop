@@ -1,4 +1,13 @@
-import { Button, Divider, FormControl, FormLabel, TextField, Typography, Link, Box } from "@mui/material";
+import {
+  Button,
+  Divider,
+  FormControl,
+  FormLabel,
+  TextField,
+  Typography,
+  Link,
+  Box,
+} from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import { googleLoginUrl } from "../utils/constants";
 import { Controller, useForm } from "react-hook-form";
@@ -6,10 +15,12 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext, useEffect, useState } from "react";
 import { decodeToken } from "../utils/decodeToken";
-import axios from "axios";
+
 import { UserContext } from "../context/UserContext";
 
 import LoginSignUpToggleButton from "./Buttons/LoginSignUpToggleButton";
+import { useMutation } from "@tanstack/react-query";
+import { loginUser } from "../api/user.service";
 
 interface SignInFormPropsType {
   handleCloseModal: () => void;
@@ -48,23 +59,25 @@ export default function LoginForm({
   const watchEmail = watch("email");
   const watchPassword = watch("password");
 
-  const onLoginSubmit = async (data: UserLoginFormType) => {
-    console.log("data", data);
-    try {
-      const response = await axios.post("http://localhost:3000/user/login", {
-        data,
-      });
-      console.log("loginos response", response);
-      sessionStorage.setItem("token", response.data);
-      setUser(decodeToken(response.data));
+  const onUserLoginMutation = useMutation({
+    mutationFn: (userData: UserLoginFormType) => loginUser(userData),
+
+    onSuccess: (response) => {
+      sessionStorage.setItem("token", response);
+      setUser(decodeToken(response));
       reset();
       handleCloseModal();
-    } catch (error: unknown) {
+    },
+    onError: (error: unknown) => {
       if (typeof error === "object" && error !== null && "status" in error) {
         if (error.status === 403) setAuthenticationError(true);
       }
       console.log(error);
-    }
+    },
+  });
+
+  const onLoginSubmit = (data: UserLoginFormType) => {
+    onUserLoginMutation.mutate(data);
   };
 
   useEffect(() => {

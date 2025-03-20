@@ -19,7 +19,6 @@ type newUserDataType = {
 router.post("/registration", async (req: Request, res: Response) => {
   console.log("req.body", req.body);
 
-  // const { name, email, password } = req.body.data;
   const { name, email, password } = req.body;
 
   const findUser = await User.findOne({ email: email });
@@ -46,7 +45,7 @@ router.post("/registration", async (req: Request, res: Response) => {
 
 router.post("/login", async (req: Request, res: Response) => {
   console.log("login req.body", req.body);
-  const { email, password } = req.body.data;
+  const { email, password } = req.body;
 
   const findUser = await User.findOne({ email: email });
   if (!findUser) return res.sendStatus(403);
