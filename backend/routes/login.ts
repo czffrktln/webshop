@@ -30,7 +30,6 @@ router.post("/", async (req: Request, res: Response) => {
   const idToken = await getIdToken(loginCode.code);
 
   const payload = jwt.decode(idToken);
-  console.log("payload", payload);
   const safeParsedPayload = safeParse(PayloadSchema, payload)
   if (!safeParsedPayload) return res.sendStatus(500)
 

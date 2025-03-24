@@ -24,10 +24,7 @@ export function getCookie(cname: string) {
   return "";
 }
 
-export function checkCookie() {
-  console.log("checkcookie fut");
-  // console.log("cookies", document.cookie);
-  
+export function checkCookie() {  
   const sessionId = getCookie("sessionId");
   if (sessionId != "") {
     return sessionId

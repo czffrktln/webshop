@@ -7,6 +7,7 @@ import cors from "cors";
 import login from './routes/login.js'
 import user from './routes/user.js'
 import puzzle from './routes/puzzle.js'
+import cart from './routes/cart.js'
 
 const app = express();
 
@@ -16,5 +17,6 @@ app.use(cors());
 app.use('/login', login)
 app.use('/user', user)
 app.use('/puzzle', puzzle)
+app.use('/cart', cart)
 
 export default app;

@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { CartItemType, CurrentCartType, PuzzleType } from "../types";
 import { useMutation } from "@tanstack/react-query";
 import { writeCurrentCart } from "../api/cart.service";
-import { checkCookie } from "../utils/cookies";
+import { checkCookie, getCookie } from "../utils/cookies";
 
 interface CartContextType {
   cart: CartItemType[] | [];
@@ -46,28 +46,15 @@ export function CartProvider({ children }: CartProviderProps) {
 
   const onCartMutation = useMutation({
     mutationFn: (currentCart: CurrentCartType) => writeCurrentCart(currentCart),
-    onSuccess: () => console.log("jejjjjjj")
+    onSuccess: (response) => console.log(response)
   })
 
   useEffect(() => {
-    console.log("cartos useffect fut");
-
     if (cart.length !== 0) {
-      console.log("hahahha");
-
-      // onCartMutation.mutate({
-      //   session_id: sessionStorage.getItem("sessionId"),
-      //   puzzles: cart.map(item => ({puzzle_id: item.puzzle.id, quantity: item.quantity}))
-      // })
-
-   
-      // sessionid: string,
-      // puzzles: {
-      //   puzzle_id: string, 
-      //   quantity: number
-      // }[],
-
-      
+      onCartMutation.mutate({
+        session_id: getCookie("sessionId"),      
+        puzzles: cart.map(item => ({puzzle_id: item.puzzle._id, quantity: item.quantity}))
+      })
     }
     
     const totalCartItems = cart.reduce<number>((acc, currentValue) => {

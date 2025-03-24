@@ -11,7 +11,6 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.get("/:id", async (req: Request, res: Response) => {
   const { id } = req.params
-  console.log("id", id);
   const puzzle = await Puzzle.findById({_id: id})
   if (!puzzle) return res.sendStatus(404)
   res.send(puzzle)

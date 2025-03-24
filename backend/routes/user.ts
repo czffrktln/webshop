@@ -17,8 +17,6 @@ type newUserDataType = {
 };
 
 router.post("/registration", async (req: Request, res: Response) => {
-  console.log("req.body", req.body);
-
   const { name, email, password } = req.body;
 
   const findUser = await User.findOne({ email: email });
@@ -35,8 +33,6 @@ router.post("/registration", async (req: Request, res: Response) => {
     given_name: name,
     email,
   };
-  console.log("newuser", newUser);
-  // console.log("newuserdata", newUserData);
 
   const sessionToken = jwt.sign(newUserData, secretKey);
 
@@ -44,7 +40,6 @@ router.post("/registration", async (req: Request, res: Response) => {
 });
 
 router.post("/login", async (req: Request, res: Response) => {
-  console.log("login req.body", req.body);
   const { email, password } = req.body;
 
   const findUser = await User.findOne({ email: email });
@@ -58,8 +53,6 @@ router.post("/login", async (req: Request, res: Response) => {
       return res.sendStatus(403);
     }
   });
-
-  console.log("loginos userünk", findUser);
 });
 
 export default router;
