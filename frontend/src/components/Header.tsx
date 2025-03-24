@@ -42,6 +42,8 @@ export default function Header() {
   const [open, setOpen] = useState<boolean>(false);
   const [isNewUserLogin, setIsNewUserLogin] = useState<boolean>(false);
 
+  const sess = localStorage.getItem("sessionId")
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -76,7 +78,7 @@ export default function Header() {
         >
           <ExtensionIcon />
           <Typography variant="h5" sx={{ cursor: "pointer" }}>
-            PuzzleShop
+            PuzzleShop, {sess}
           </Typography>
         </Box>
 

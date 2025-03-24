@@ -55,15 +55,15 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
-      <CartProvider>
-        <UserProvider>
-          <PuzzleProvider>
-            <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <CartProvider>
+          <UserProvider>
+            <PuzzleProvider>
               <RouterProvider router={router} />
-            </QueryClientProvider>
-          </PuzzleProvider>
-        </UserProvider>
-      </CartProvider>
+            </PuzzleProvider>
+          </UserProvider>
+        </CartProvider>
+      </QueryClientProvider>
     </ThemeProvider>
   </StrictMode>
 );
