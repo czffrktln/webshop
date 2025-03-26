@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { CartItemType, CurrentCartType, PuzzleType } from "../types";
-import { useMutation } from "@tanstack/react-query";
-import { writeCurrentCart } from "../api/cart.service";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getCartBySesionId, writeCurrentCart } from "../api/cart.service";
 import { checkCookie, getCookie } from "../utils/cookies";
 
 interface CartContextType {
@@ -12,7 +12,7 @@ interface CartContextType {
   increaseAmount: (item: CartItemType) => void;
   removeItem: (id: string) => void;
   numberOfItems: number | null;
-  total: number
+  total: number;
 }
 
 const defaultState: CartContextType = {
@@ -23,7 +23,7 @@ const defaultState: CartContextType = {
   increaseAmount: () => [],
   removeItem: () => [],
   numberOfItems: null,
-  total: 0
+  total: 0,
 };
 
 export const CartContext = createContext(defaultState);
@@ -34,29 +34,40 @@ type CartProviderProps = {
 
 export function CartProvider({ children }: CartProviderProps) {
   const savedCart = sessionStorage.getItem("cart");
-  
-  
+
+  const sessionId = checkCookie();
+
+  const { data: currentCart } = useQuery<CurrentCartType>({
+    queryKey: ["cart", sessionId],
+    queryFn: () => getCartBySesionId(sessionId),
+  });
+
+  console.log("currentCart", currentCart);
+
   const [cart, setCart] = useState<CartItemType[] | []>(
     savedCart ? JSON.parse(savedCart) : []
   );
   const [numberOfItems, setNumberOfItems] = useState<number | null>(null);
-  const [ total, setTotal ] = useState<number>(0)
-  
+  const [total, setTotal] = useState<number>(0);
+
   console.log("cart", cart);
 
   const onCartMutation = useMutation({
     mutationFn: (currentCart: CurrentCartType) => writeCurrentCart(currentCart),
-    onSuccess: (response) => console.log(response)
-  })
+    onSuccess: (response) => console.log(response),
+  });
 
   useEffect(() => {
     if (cart.length !== 0) {
       onCartMutation.mutate({
-        session_id: getCookie("sessionId"),      
-        puzzles: cart.map(item => ({puzzle_id: item.puzzle._id, quantity: item.quantity}))
-      })
+        session_id: getCookie("sessionId"),
+        puzzles: cart.map((item) => ({
+          puzzle_id: item.puzzle._id,
+          quantity: item.quantity,
+        })),
+      });
     }
-    
+
     const totalCartItems = cart.reduce<number>((acc, currentValue) => {
       acc += currentValue.quantity;
       return acc;
@@ -64,29 +75,35 @@ export function CartProvider({ children }: CartProviderProps) {
     setNumberOfItems(totalCartItems);
     sessionStorage.setItem("cart", JSON.stringify(cart));
 
-  const totalAmount = cart.reduce<number>((acc, currentValue) => {
-      acc += Number(currentValue.puzzle.price) * currentValue.quantity
-      return acc
-    }, 0)
-    setTotal(totalAmount)
+    const totalAmount = cart.reduce<number>((acc, currentValue) => {
+      acc += Number(currentValue.puzzle.price) * currentValue.quantity;
+      return acc;
+    }, 0);
+    setTotal(totalAmount);
   }, [cart]);
-
 
   const addToCart = (puzzle: PuzzleType) => {
     checkCookie();
-    const puzzleIndex = cart.findIndex((item) => item.puzzle._id === puzzle._id);
+    const puzzleIndex = cart.findIndex(
+      (item) => item.puzzle._id === puzzle._id
+    );
 
     if (puzzleIndex === -1) {
       setCart([...cart, { puzzle, quantity: 1 }]);
     } else {
       const newCart = [...cart];
-      newCart[puzzleIndex] = {...newCart[puzzleIndex], quantity: newCart[puzzleIndex].quantity + 1};
+      newCart[puzzleIndex] = {
+        ...newCart[puzzleIndex],
+        quantity: newCart[puzzleIndex].quantity + 1,
+      };
       setCart(newCart);
     }
   };
 
   const decreaseAmount = (cartItem: CartItemType) => {
-    const puzzleIndex = cart.findIndex((item) => item.puzzle._id === cartItem.puzzle._id);
+    const puzzleIndex = cart.findIndex(
+      (item) => item.puzzle._id === cartItem.puzzle._id
+    );
 
     if (puzzleIndex === -1) {
       return;
@@ -103,7 +120,9 @@ export function CartProvider({ children }: CartProviderProps) {
   };
 
   const increaseAmount = (cartItem: CartItemType) => {
-    const puzzleIndex = cart.findIndex((item) => item.puzzle._id === cartItem.puzzle._id);
+    const puzzleIndex = cart.findIndex(
+      (item) => item.puzzle._id === cartItem.puzzle._id
+    );
 
     if (puzzleIndex === -1) {
       return;
@@ -132,7 +151,7 @@ export function CartProvider({ children }: CartProviderProps) {
         decreaseAmount,
         increaseAmount,
         removeItem,
-        total
+        total,
       }}
     >
       {children}

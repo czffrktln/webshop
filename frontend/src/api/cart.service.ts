@@ -13,3 +13,11 @@ export async function writeCurrentCart(currentCart: CurrentCartType) {
   }
   return await response.json();
 }
+
+export async function getCartBySesionId(sessionId: string) {
+  const response = await fetch(`http://localhost:3000/cart/${sessionId}`);
+  if (!response.ok) {
+    throw new Error(`An error occured: ${response.status}`);
+  }
+  return await response.json();
+}
