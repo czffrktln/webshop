@@ -53,7 +53,7 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+  // <StrictMode>
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <CartProvider>
@@ -65,5 +65,5 @@ createRoot(document.getElementById("root")!).render(
         </CartProvider>
       </QueryClientProvider>
     </ThemeProvider>
-  </StrictMode>
+  // </StrictMode>
 );

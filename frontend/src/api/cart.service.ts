@@ -1,6 +1,7 @@
-import { CurrentCartType } from "../types";
+import { CartTypeToDatabase } from "../types";
 
-export async function writeCurrentCart(currentCart: CurrentCartType) {
+export async function writeCurrentCart(currentCart: CartTypeToDatabase) {
+  console.log("writecurrentcart fut");
   const response = await fetch("http://localhost:3000/cart", {
     method: "POST",
     headers: {
@@ -15,6 +16,7 @@ export async function writeCurrentCart(currentCart: CurrentCartType) {
 }
 
 export async function getCartBySesionId(sessionId: string) {
+  console.log('getcartbysessionid fut');
   const response = await fetch(`http://localhost:3000/cart/${sessionId}`);
   if (!response.ok) {
     throw new Error(`An error occured: ${response.status}`);

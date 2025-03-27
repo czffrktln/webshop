@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { CartItemType, CurrentCartType, PuzzleType } from "../types";
+import { CartItemType, CartType, CartTypeToDatabase, PuzzleType } from "../types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCartBySesionId, writeCurrentCart } from "../api/cart.service";
 import { checkCookie, getCookie } from "../utils/cookies";
@@ -34,10 +34,13 @@ type CartProviderProps = {
 
 export function CartProvider({ children }: CartProviderProps) {
   const savedCart = sessionStorage.getItem("cart");
-
+  console.log("cartcontext fut");
+  console.log("cookie", document.cookie);
+  
+  
   const sessionId = checkCookie();
 
-  const { data: currentCart } = useQuery<CurrentCartType>({
+  const { data: currentCart } = useQuery<CartType>({
     queryKey: ["cart", sessionId],
     queryFn: () => getCartBySesionId(sessionId),
   });
@@ -53,7 +56,7 @@ export function CartProvider({ children }: CartProviderProps) {
   console.log("cart", cart);
 
   const onCartMutation = useMutation({
-    mutationFn: (currentCart: CurrentCartType) => writeCurrentCart(currentCart),
+    mutationFn: (currentCart: CartTypeToDatabase) => writeCurrentCart(currentCart),
     onSuccess: (response) => console.log(response),
   });
 

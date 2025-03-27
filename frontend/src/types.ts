@@ -28,11 +28,30 @@ export interface CartItemType {
   quantity: number
 }
 
-export interface CurrentCartType {
+export interface CartTypeToDatabase {
   session_id: string,
   puzzles: {
     puzzle_id: string, 
     quantity: number
   }[], 
 }
+
+export interface CartType {
+  session_id: string,
+  puzzles: {
+    puzzle: PuzzleType, 
+    quantity: number
+  }[], 
+}
+
+// export interface CartType {
+//   existingType: null | {
+//     session_id: string,
+//     puzzles: {
+//       puzzle: PuzzleType, 
+//       quantity: number
+//     }[], 
+
+//   }
+// }
 
