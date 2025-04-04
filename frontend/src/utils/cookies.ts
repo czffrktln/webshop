@@ -30,6 +30,6 @@ export function checkCookie() {
     return sessionId;
   } else {
     setCookie("sessionId", uuidv4(), 1);
-    return getCookie("sessinId");
+    return getCookie("sessionId");
   }
 }

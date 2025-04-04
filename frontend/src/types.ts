@@ -24,34 +24,33 @@ export interface UserType {
 }
 
 export interface CartItemType {
-  puzzle: PuzzleType
-  quantity: number
+  puzzle: PuzzleType;
+  quantity: number;
 }
 
 export interface CartTypeToDatabase {
-  session_id: string,
+  session_id: string;
   puzzles: {
-    puzzle_id: string, 
-    quantity: number
-  }[], 
+    puzzle_id: string;
+    quantity: number;
+  }[];
 }
 
 export interface CartType {
-  session_id: string,
+  session_id: string;
   puzzles: {
-    puzzle: PuzzleType, 
-    quantity: number
-  }[], 
+    puzzle: PuzzleType;
+    quantity: number;
+  }[];
 }
 
 // export interface CartType {
 //   existingType: null | {
 //     session_id: string,
 //     puzzles: {
-//       puzzle: PuzzleType, 
+//       puzzle: PuzzleType,
 //       quantity: number
-//     }[], 
+//     }[],
 
 //   }
 // }
-

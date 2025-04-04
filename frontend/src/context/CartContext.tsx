@@ -1,6 +1,11 @@
 import { createContext, useEffect, useState } from "react";
-import { CartItemType, CartType, CartTypeToDatabase, PuzzleType } from "../types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  CartItemType,
+  CartType,
+  CartTypeToDatabase,
+  PuzzleType,
+} from "../types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCartBySesionId, writeCurrentCart } from "../api/cart.service";
 import { checkCookie, getCookie } from "../utils/cookies";
 
@@ -33,11 +38,16 @@ type CartProviderProps = {
 };
 
 export function CartProvider({ children }: CartProviderProps) {
-  const savedCart = sessionStorage.getItem("cart");
+  const [numberOfItems, setNumberOfItems] = useState<number | null>(null);
+  const [total, setTotal] = useState<number>(0);
+  const [isSessionIdInDB, setIsSessionIdInDB] = useState(false);
+
+  // const savedCart = sessionStorage.getItem("cart");
   console.log("cartcontext fut");
   console.log("cookie", document.cookie);
-  
-  
+
+  const queryClient = useQueryClient();
+
   const sessionId = checkCookie();
 
   const { data: currentCart } = useQuery<CartType>({
@@ -45,29 +55,50 @@ export function CartProvider({ children }: CartProviderProps) {
     queryFn: () => getCartBySesionId(sessionId),
   });
 
+  const [cart, setCart] = useState<CartItemType[] | []>(
+    currentCart ? currentCart.puzzles : []
+  );
+
   console.log("currentCart", currentCart);
 
-  const [cart, setCart] = useState<CartItemType[] | []>(
-    savedCart ? JSON.parse(savedCart) : []
-  );
-  const [numberOfItems, setNumberOfItems] = useState<number | null>(null);
-  const [total, setTotal] = useState<number>(0);
+  // const [cart, setCart] = useState<CartItemType[] | []>(
+  //   savedCart ? JSON.parse(savedCart) : []
+  // );
 
   console.log("cart", cart);
 
+  // const onCartMutation = useMutation({
+  //   mutationFn: (currentCart: CartType) => writeCurrentCart(currentCart),
+  //   onSuccess: (response) => console.log(response),
+  // });
+
   const onCartMutation = useMutation({
-    mutationFn: (currentCart: CartTypeToDatabase) => writeCurrentCart(currentCart),
-    onSuccess: (response) => console.log(response),
+    mutationFn: (currentCart: CartType) => writeCurrentCart(currentCart),
+    onSuccess: (response) => {
+      console.log("onsuccess response", response);
+      console.log("onsuccess response 2", response.puzzles);
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+    },
   });
+
+  useEffect(() => {
+    if (currentCart) {
+      onCartMutation.mutate({
+        session_id: getCookie("sessionId"),
+        puzzles: [],
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (cart.length !== 0) {
       onCartMutation.mutate({
         session_id: getCookie("sessionId"),
-        puzzles: cart.map((item) => ({
-          puzzle_id: item.puzzle._id,
-          quantity: item.quantity,
-        })),
+        puzzles: cart,
+        // puzzles: cart.map((item) => ({
+        //   puzzle_id: item.puzzle._id,
+        //   quantity: item.quantity,
+        // })),
       });
     }
 
