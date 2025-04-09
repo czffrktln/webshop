@@ -62,7 +62,7 @@ export default function Header() {
     setAnchorEl(null);
     setUser(null);
     setCart([]);
-    sessionStorage.removeItem("cart");
+    // sessionStorage.removeItem("cart");
     sessionStorage.removeItem("token");
     navigate("/");
   };

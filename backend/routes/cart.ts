@@ -30,6 +30,9 @@ router.post("/", async (req: Request, res: Response) => {
     quantity: puzzleItem.quantity,
   }));
 
+  console.log("puzzlesArrayToDatabase", puzzlesArrayToDatabase);
+  
+
   const existingCart = await Cart.findOne({ session_id: session_id });
   if (!existingCart) {
     const newCart = await Cart.create({
@@ -62,14 +65,19 @@ router.get("/:id", async (req: Request, res: Response) => {
   const session_id = req.params.id;
 
   console.log("session_id getből", session_id);
+
   const existingCart = await Cart.findOne({ session_id: session_id }).populate({
-    path: "puzzles.puzzle",
-    // select: ["puzzle_id", "sessionId"],
+    path: "puzzles.puzzle"
   });
 
   console.log("EXISTING cart", existingCart);
 
-  res.send(existingCart);
+  if (!existingCart) {
+    const newCart = await Cart.create({session_id: session_id, puzzles: []})
+    res.send(newCart)
+  } else {
+    res.send(existingCart);
+  }
 });
 
 export default router;
