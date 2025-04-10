@@ -1,10 +1,6 @@
 import { createContext, useEffect, useState } from "react";
-import {
-  CartItemType,
-  CartType,
-  PuzzleType,
-} from "../types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { CartItemType, CartType, PuzzleType } from "../types";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCartBySesionId, writeCurrentCart } from "../api/cart.service";
 import { checkCookie, getCookie } from "../utils/cookies";
 
@@ -43,10 +39,9 @@ export function CartProvider({ children }: CartProviderProps) {
   const [total, setTotal] = useState<number>(0);
   const [cart, setCart] = useState<CartItemType[] | []>([]);
 
-  const queryClient = useQueryClient();
   const sessionId = checkCookie();
 
-  const { data: currentCart, isFetching} = useQuery<CartType>({
+  const { data: currentCart, isFetching } = useQuery<CartType>({
     queryKey: ["cart", sessionId],
     queryFn: () => getCartBySesionId(sessionId),
   });
@@ -55,16 +50,14 @@ export function CartProvider({ children }: CartProviderProps) {
   // console.log("currentCart", currentCart);
   console.log("cart", cart);
 
-  
   useEffect(() => {
     // console.log("isfetching fut");
-    if (!isFetching) setCart(currentCart.puzzles)
-    }, [isFetching])
-  
+    if (!isFetching) setCart(currentCart!.puzzles);
+  }, [isFetching]);
 
   const onCartMutation = useMutation({
     mutationFn: (currentCart: CartType) => writeCurrentCart(currentCart),
-    onSuccess: () => {    
+    onSuccess: () => {
       // queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });
@@ -89,7 +82,6 @@ export function CartProvider({ children }: CartProviderProps) {
       return acc;
     }, 0);
     setTotal(totalAmount);
-
   }, [cart]);
 
   const addToCart = (puzzle: PuzzleType) => {
