@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllPuzzles } from "../api/puzzle.service";
 import CardComponents from "../components/Card";
 import { PuzzleType } from "../types";
-import { Box, TextField } from "@mui/material";
+import { Box, Pagination, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -13,6 +13,8 @@ export default function Home() {
   const [searchValue, setSearchValue] = useState(
     searchParams.get("search") ?? ""
   );
+  const [page, setPage] = useState(2);
+  const [perPage, setPerPage] = useState(12);
 
   const {
     data: puzzleList,
@@ -28,7 +30,15 @@ export default function Home() {
     // return <ErrorPage/>
   }
 
-  const filteredPuzzles = puzzleList?.filter(
+  const start = (page - 1) * perPage;
+  const end = start + perPage;
+  const puzzleListLength = Math.ceil(puzzleList!.length / perPage);
+
+  console.log("start", start);
+  console.log("end", end);
+
+  const paginatedPuzzles = puzzleList?.slice(start, end);
+  const filteredPuzzles = paginatedPuzzles?.filter(
     (currentPuzzle) =>
       currentPuzzle.title.toLowerCase().includes(searchValue.toLowerCase()) ||
       currentPuzzle.brand.toLowerCase().includes(searchValue.toLowerCase())
@@ -49,6 +59,13 @@ export default function Home() {
   }, [searchValue]);
 
   console.log("filteredPuzzles", filteredPuzzles);
+
+  function handleOnPageChange(
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) {
+    setPage(value);
+  }
 
   return (
     <>
@@ -78,6 +95,19 @@ export default function Home() {
         {filteredPuzzles?.map((puzzle) => (
           <CardComponents key={puzzle._id} puzzle={puzzle} />
         ))}
+      </Box>
+
+      <Box sx={{ display: "flex", justifyContent: "center", marginY: "50px" }}>
+        <Stack spacing={2}>
+          <Typography>Page: {page}</Typography>
+          <Pagination
+            count={puzzleListLength}
+            page={page}
+            size="large"
+            color="primary"
+            onChange={handleOnPageChange}
+          />
+        </Stack>
       </Box>
     </>
   );
