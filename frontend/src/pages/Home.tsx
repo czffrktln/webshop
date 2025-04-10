@@ -28,8 +28,10 @@ export default function Home() {
     // return <ErrorPage/>
   }
 
-  const filteredPuzzles = puzzleList?.filter((currentPuzzle) =>
-    currentPuzzle.title.toLowerCase().includes(searchValue.toLowerCase())
+  const filteredPuzzles = puzzleList?.filter(
+    (currentPuzzle) =>
+      currentPuzzle.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+      currentPuzzle.brand.toLowerCase().includes(searchValue.toLowerCase())
   );
 
   function handleOnSearchByName(e: InputEvent) {
