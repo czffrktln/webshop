@@ -126,7 +126,7 @@ export default function Home() {
             sx={{ display: "flex", justifyContent: "center", marginY: "50px" }}
           >
             <Stack spacing={2}>
-              <Typography>Page: {page}</Typography>
+              {/* <Typography>Page: {page}</Typography> */}
               <Pagination
                 count={Math.ceil(puzzleList.length / perPage)}
                 page={page}
