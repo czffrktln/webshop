@@ -10,18 +10,22 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { bouncy } from "ldrs";
+import { PageContext } from "../context/PageContext";
 
 // type InputEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 export default function Home() {
+
+  const {page, setPage} = useContext(PageContext)
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchValue, setSearchValue] = useState(
     searchParams.get("search") ?? ""
   );
-  const [page, setPage] = useState(1);
+
   const [perPage, setPerPage] = useState(12);
 
   bouncy.register();
@@ -62,7 +66,7 @@ export default function Home() {
     }
   }, [searchValue]);
 
-  console.log("filteredPuzzles", filteredPuzzles);
+  // console.log("filteredPuzzles", filteredPuzzles);
 
   function handleOnPageChange(
     event: React.ChangeEvent<unknown>,
@@ -71,10 +75,17 @@ export default function Home() {
     setPage(value);
   }
 
-  // useEffect(() => {
-  //   searchParams.set("page", String(page));
-  //   setSearchParams(searchParams);
-  // }, [page]);
+  useEffect(() => {
+
+    if (page == 1) {
+      searchParams.delete("page")
+      setSearchParams(searchParams);
+    } else {
+      searchParams.set("page", String(page));
+      setSearchParams(searchParams);
+
+    }
+  }, [page]);
 
   return (
     <>

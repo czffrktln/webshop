@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+// import { StrictMode } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { createRoot } from "react-dom/client";
 import "./index.css";
@@ -54,16 +54,16 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   // <StrictMode>
-    <ThemeProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <CartProvider>
-          <UserProvider>
-            <PuzzleProvider>
-              <RouterProvider router={router} />
-            </PuzzleProvider>
-          </UserProvider>
-        </CartProvider>
-      </QueryClientProvider>
-    </ThemeProvider>
+  <ThemeProvider theme={theme}>
+    <QueryClientProvider client={queryClient}>
+      <CartProvider>
+        <UserProvider>
+          <PuzzleProvider>
+            <RouterProvider router={router} />
+          </PuzzleProvider>
+        </UserProvider>
+      </CartProvider>
+    </QueryClientProvider>
+  </ThemeProvider>
   // </StrictMode>
 );

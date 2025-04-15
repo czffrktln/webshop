@@ -22,6 +22,7 @@ import PersonIcon from "@mui/icons-material/Person";
 
 import SignUpForm from "./SignUpForm";
 import LoginForm from "./LoginForm";
+import { PageContext } from "../context/PageContext";
 
 const style = {
   position: "absolute",
@@ -36,6 +37,7 @@ const style = {
 
 export default function Header() {
   const navigate = useNavigate();
+  const {setPage} = useContext(PageContext)
   const { user, setUser } = useContext(UserContext);
   const { numberOfItems, setCart } = useContext(CartContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -62,16 +64,20 @@ export default function Header() {
     setAnchorEl(null);
     setUser(null);
     setCart([]);
-    // sessionStorage.removeItem("cart");
     sessionStorage.removeItem("token");
     navigate("/");
   };
+
+  function handleHomePageRedirect() {
+    navigate("/")
+    setPage(1)
+  }
 
   return (
     <AppBar sx={{ position: "static"}}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box
-          onClick={() => navigate("/")}
+          onClick={handleHomePageRedirect}
           sx={{ display: "flex", alignItems: "center", gap: 1 }}
         >
           <ExtensionIcon />

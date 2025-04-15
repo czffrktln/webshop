@@ -1,14 +1,18 @@
 import "./App.css";
 
+import { PageProvider } from "./context/PageContext";
 import Header from "./components/Header";
 import { Outlet } from "react-router-dom";
+
 
 function App() {
 
   return (
     <div className="app">
-      <Header />
-      <Outlet />
+      <PageProvider>
+        <Header />
+        <Outlet />
+      </PageProvider>
     </div>
   );
 }
