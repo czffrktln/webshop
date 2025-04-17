@@ -37,7 +37,7 @@ const style = {
 
 export default function Header() {
   const navigate = useNavigate();
-  const {setPage} = useContext(PageContext)
+  const { setPage } = useContext(PageContext);
   const { user, setUser } = useContext(UserContext);
   const { numberOfItems, setCart } = useContext(CartContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -69,12 +69,12 @@ export default function Header() {
   };
 
   function handleHomePageRedirect() {
-    navigate("/")
-    setPage(1)
+    navigate("/");
+    setPage(1);
   }
 
   return (
-    <AppBar sx={{ position: "static"}}>
+    <AppBar sx={{ position: "static" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box
           onClick={handleHomePageRedirect}

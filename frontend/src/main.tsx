@@ -13,7 +13,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import Cart from "./pages/Cart.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 const theme = createTheme({
   palette: {
@@ -24,7 +24,7 @@ const theme = createTheme({
     secondary: {
       main: "#9BC4CB",
     },
-  }
+  },
 });
 
 const router = createBrowserRouter([

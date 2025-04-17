@@ -18,8 +18,7 @@ import { PageContext } from "../context/PageContext";
 // type InputEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 export default function Home() {
-
-  const {page, setPage} = useContext(PageContext)
+  const { page, setPage } = useContext(PageContext);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchValue, setSearchValue] = useState(
@@ -44,17 +43,39 @@ export default function Home() {
     // return <ErrorPage/>
   }
 
+  const [filteredPuzzles, setFilteredPuzzles] =
+    useState<PuzzleType[]>(puzzleList);
+
   const start = (page - 1) * perPage;
   const end = start + perPage;
   // const puzzleListLength =
   // Math.ceil(puzzleList.length / perPage);
 
-  const paginatedPuzzles = puzzleList?.slice(start, end);
-  const filteredPuzzles = paginatedPuzzles?.filter(
+  const filteredPuzzles2 = puzzleList?.filter(
     (currentPuzzle) =>
       currentPuzzle.title.toLowerCase().includes(searchValue.toLowerCase()) ||
       currentPuzzle.brand.toLowerCase().includes(searchValue.toLowerCase())
   );
+
+  useEffect(() => {
+    setFilteredPuzzles(
+      puzzleList?.filter(
+        (currentPuzzle) =>
+          currentPuzzle.title
+            .toLowerCase()
+            .includes(searchValue.toLowerCase()) ||
+          currentPuzzle.brand.toLowerCase().includes(searchValue.toLowerCase())
+      )
+    );
+    setPage(1);
+  }, [searchValue]);
+
+  console.log("filteredPuzzles", filteredPuzzles);
+
+  const paginatedPuzzles =
+    filteredPuzzles?.length < puzzleList?.length
+      ? filteredPuzzles?.slice(start, end)
+      : puzzleList?.slice(start, end);
 
   useEffect(() => {
     if (searchValue !== "") {
@@ -76,14 +97,12 @@ export default function Home() {
   }
 
   useEffect(() => {
-
     if (page == 1) {
-      searchParams.delete("page")
+      searchParams.delete("page");
       setSearchParams(searchParams);
     } else {
       searchParams.set("page", String(page));
       setSearchParams(searchParams);
-
     }
   }, [page]);
 
@@ -108,6 +127,7 @@ export default function Home() {
               onChange={(e) => setSearchValue(e.target.value)}
             />
           </Box>
+
           <Box
             sx={{
               display: "grid",
@@ -118,17 +138,21 @@ export default function Home() {
               marginTop: "50px",
             }}
           >
-            {filteredPuzzles?.map((puzzle) => (
+            {paginatedPuzzles?.map((puzzle) => (
               <CardComponents key={puzzle._id} puzzle={puzzle} />
             ))}
           </Box>
           <Box
-            sx={{ display: "flex", justifyContent: "center", marginY: "50px" }}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              marginY: "50px",
+            }}
           >
             <Stack spacing={2}>
               {/* <Typography>Page: {page}</Typography> */}
               <Pagination
-                count={Math.ceil(puzzleList.length / perPage)}
+                count={Math.ceil(filteredPuzzles?.length / perPage)}
                 page={page}
                 size="large"
                 color="primary"
