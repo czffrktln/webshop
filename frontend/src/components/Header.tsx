@@ -23,6 +23,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import SignUpForm from "./SignUpForm";
 import LoginForm from "./LoginForm";
 import { PageContext } from "../context/PageContext";
+import { SearchValueContext } from "../context/SearchValueContext";
 
 const style = {
   position: "absolute",
@@ -38,6 +39,7 @@ const style = {
 export default function Header() {
   const navigate = useNavigate();
   const { setPage } = useContext(PageContext);
+  const { setSearchValue } = useContext(SearchValueContext)
   const { user, setUser } = useContext(UserContext);
   const { numberOfItems, setCart } = useContext(CartContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -70,6 +72,7 @@ export default function Header() {
 
   function handleHomePageRedirect() {
     navigate("/");
+    setSearchValue("")
     setPage(1);
   }
 

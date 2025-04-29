@@ -14,22 +14,22 @@ import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { bouncy } from "ldrs";
 import { PageContext } from "../context/PageContext";
+import { SearchValueContext } from "../context/SearchValueContext";
 
 // type InputEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 export default function Home() {
   const { page, setPage } = useContext(PageContext);
-  const [perPage, setPerPage] = useState(12);
+  const { searchValue, setSearchValue } = useContext(SearchValueContext)
+  const [perPage, setPerPage] = useState(6);
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchValue, setSearchValue] = useState(
-    searchParams.get("search") ?? ""
-  );
+  // const [searchValue, setSearchValue] = useState(
+  //   searchParams.get("search") ?? ""
+  // );
 
   const [puzzles, setPuzzles] = useState<PuzzleType[]>([]);
   const [paginatedPuzzles, setPaginatedPuzzles] = useState<PuzzleType[]>([]);
-
-  // const [filteredPuzzles, setFilteredPuzzles] = useState<PuzzleType[]>(puzzles);
 
   const start = (page - 1) * perPage;
   const end = start + perPage;
@@ -51,56 +51,61 @@ export default function Home() {
     // return <ErrorPage/>
   }
 
-  // const puzzleListLength =
-  // Math.ceil(puzzleList.length / perPage);
-
-  // const filteredPuzzles2 = puzzleList?.filter(
-  //   (currentPuzzle) =>
-  //     currentPuzzle.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-  //     currentPuzzle.brand.toLowerCase().includes(searchValue.toLowerCase())
-  // );
-
-  // const paginationRule =
-  // filteredPuzzles?.length < puzzles?.length
-  //   ? filteredPuzzles?.slice(start, end)
-  //   : puzzles?.slice(start, end);
-
   useEffect(() => {
     if (puzzleList !== undefined) {
-      setPuzzles(puzzleList);
-      setPaginatedPuzzles(puzzleList.slice(start, end));
+       if (searchValue !== "") {
+         const filteredPuzzles = puzzleList.filter(
+           (currentPuzzle) =>
+             currentPuzzle.title
+               .toLowerCase()
+               .includes(searchValue.toLowerCase()) ||
+             currentPuzzle.brand.toLowerCase().includes(searchValue.toLowerCase())
+         );
+         setPuzzles(filteredPuzzles);
+       } else {
+         setPuzzles(puzzleList);
+       }
     }
-
-    // setCount(prevCount => prevCount - 1);
   }, [puzzleList]);
 
-  console.log("puzzlelist", puzzleList);
-  console.log("puzzles", puzzles);
-  console.log("paginatedPuzzles", paginatedPuzzles);
+  // console.log("puzzlelist", puzzleList);
+  // console.log("puzzles", puzzles);
+  // console.log("paginatedPuzzles", paginatedPuzzles);
+  // console.log("searchparams", searchParams.get("search"));
+  console.log("pageparams", searchParams.get("page"));
+  console.log("page homeon", page);
+  
+  
 
   useEffect(() => {
+    setPaginatedPuzzles(puzzles.slice(start, end))
+  }, [puzzles])
+
+  useEffect(() => {
+    console.log("searchvalues useeffect", searchValue);
+    
     if (searchValue !== "") {
       searchParams.set("search", searchValue);
       setSearchParams(searchParams);
     } else {
+      console.log("searchparams delete");
+      
       searchParams.delete("search");
       setSearchParams(searchParams);
     }
 
     if (searchValue === "" && puzzleList !== undefined) {
       setPuzzles(puzzleList);
-    } else {
-      const filteredPuzzles2 = puzzles.filter(
+    } else if (puzzleList !== undefined ){
+      const filteredPuzzles = puzzleList.filter(
         (currentPuzzle) =>
           currentPuzzle.title
             .toLowerCase()
             .includes(searchValue.toLowerCase()) ||
           currentPuzzle.brand.toLowerCase().includes(searchValue.toLowerCase())
       );
-
-      setPuzzles(filteredPuzzles2);
+      setPuzzles(filteredPuzzles);
     }
-
     setPage(1);
   }, [searchValue]);
 
@@ -112,13 +117,16 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if (page == 1) {
-      searchParams.delete("page");
-      setSearchParams(searchParams);
-    } else {
+    // if (page === 1) {
+    // // if (Number(searchParams.get("page")) == 1) {
+    //   console.log("pagedelete fut?", page);
+      
+    //   searchParams.delete("page");
+    //   setSearchParams(searchParams);
+    // } else {
       searchParams.set("page", String(page));
       setSearchParams(searchParams);
-    }
+    // }
 
     setPaginatedPuzzles(puzzles.slice(start, end));
   }, [page]);
