@@ -20,7 +20,7 @@ import { SearchValueContext } from "../context/SearchValueContext";
 
 export default function Home() {
   const { page, setPage } = useContext(PageContext);
-  const { searchValue, setSearchValue } = useContext(SearchValueContext)
+  const { searchValue, setSearchValue } = useContext(SearchValueContext);
   const [perPage, setPerPage] = useState(6);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -30,6 +30,7 @@ export default function Home() {
 
   const [puzzles, setPuzzles] = useState<PuzzleType[]>([]);
   const [paginatedPuzzles, setPaginatedPuzzles] = useState<PuzzleType[]>([]);
+  const [filterError, setFilterError] = useState("");
 
   const start = (page - 1) * perPage;
   const end = start + perPage;
@@ -53,50 +54,50 @@ export default function Home() {
 
   useEffect(() => {
     if (puzzleList !== undefined) {
-       if (searchValue !== "") {
-         const filteredPuzzles = puzzleList.filter(
-           (currentPuzzle) =>
-             currentPuzzle.title
-               .toLowerCase()
-               .includes(searchValue.toLowerCase()) ||
-             currentPuzzle.brand.toLowerCase().includes(searchValue.toLowerCase())
-         );
-         setPuzzles(filteredPuzzles);
-       } else {
-         setPuzzles(puzzleList);
-       }
+      if (searchValue !== "") {
+        const filteredPuzzles = puzzleList.filter(
+          (currentPuzzle) =>
+            currentPuzzle.title
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            currentPuzzle.brand
+              .toLowerCase()
+              .includes(searchValue.toLowerCase())
+        );
+        setPuzzles(filteredPuzzles);
+      } else {
+        setPuzzles(puzzleList);
+      }
     }
   }, [puzzleList]);
 
   // console.log("puzzlelist", puzzleList);
-  // console.log("puzzles", puzzles);
+  console.log("puzzles", puzzles);
   // console.log("paginatedPuzzles", paginatedPuzzles);
   // console.log("searchparams", searchParams.get("search"));
-  console.log("pageparams", searchParams.get("page"));
-  console.log("page homeon", page);
-  
-  
+  // console.log("pageparams", searchParams.get("page"));
+  // console.log("page homeon", page);
 
   useEffect(() => {
-    setPaginatedPuzzles(puzzles.slice(start, end))
-  }, [puzzles])
+    setPaginatedPuzzles(puzzles.slice(start, end));
+  }, [puzzles]);
 
   useEffect(() => {
     console.log("searchvalues useeffect", searchValue);
-    
+
     if (searchValue !== "") {
       searchParams.set("search", searchValue);
       setSearchParams(searchParams);
     } else {
       console.log("searchparams delete");
-      
+
       searchParams.delete("search");
       setSearchParams(searchParams);
     }
 
     if (searchValue === "" && puzzleList !== undefined) {
       setPuzzles(puzzleList);
-    } else if (puzzleList !== undefined ){
+    } else if (puzzleList !== undefined) {
       const filteredPuzzles = puzzleList.filter(
         (currentPuzzle) =>
           currentPuzzle.title
@@ -104,9 +105,16 @@ export default function Home() {
             .includes(searchValue.toLowerCase()) ||
           currentPuzzle.brand.toLowerCase().includes(searchValue.toLowerCase())
       );
+
+      console.log("filteredPuzzles", filteredPuzzles);
+
+      if (filteredPuzzles.length === 0) {
+        setFilterError("Not found");
+      }
+
       setPuzzles(filteredPuzzles);
+      setPage(1);
     }
-    setPage(1);
   }, [searchValue]);
 
   function handleOnPageChange(
@@ -117,16 +125,16 @@ export default function Home() {
   }
 
   useEffect(() => {
-    // if (page === 1) {
-    // // if (Number(searchParams.get("page")) == 1) {
-    //   console.log("pagedelete fut?", page);
-      
-    //   searchParams.delete("page");
-    //   setSearchParams(searchParams);
-    // } else {
+    if (page === 1) {
+      // if (Number(searchParams.get("page")) == 1) {
+      console.log("pagedelete fut?", page);
+
+      searchParams.delete("page");
+      setSearchParams(searchParams);
+    } else {
       searchParams.set("page", String(page));
       setSearchParams(searchParams);
-    // }
+    }
 
     setPaginatedPuzzles(puzzles.slice(start, end));
   }, [page]);
@@ -151,6 +159,7 @@ export default function Home() {
               sx={{ width: "350px" }}
               onChange={(e) => setSearchValue(e.target.value)}
             />
+            {filterError !== "" && <Typography>{filterError}</Typography>}
           </Box>
 
           <Box
