@@ -3,6 +3,7 @@ import { getAllPuzzles } from "../api/puzzle.service";
 import CardComponents from "../components/Card";
 import { PuzzleType } from "../types";
 import {
+  Avatar,
   Box,
   Grid2,
   Pagination,
@@ -15,8 +16,8 @@ import { useSearchParams } from "react-router-dom";
 import { bouncy } from "ldrs";
 import { PageContext } from "../context/PageContext";
 import { SearchValueContext } from "../context/SearchValueContext";
-
-// type InputEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
+import { default as sadPuzzle } from "../assets/sad_puzzle.png";
+import { default as sadBluePuzzle } from "../assets/sadpuzzle2.png";
 
 export default function Home() {
   const { page, setPage } = useContext(PageContext);
@@ -24,13 +25,10 @@ export default function Home() {
   const [perPage, setPerPage] = useState(6);
 
   const [searchParams, setSearchParams] = useSearchParams();
-  // const [searchValue, setSearchValue] = useState(
-  //   searchParams.get("search") ?? ""
-  // );
 
   const [puzzles, setPuzzles] = useState<PuzzleType[]>([]);
   const [paginatedPuzzles, setPaginatedPuzzles] = useState<PuzzleType[]>([]);
-  const [filterError, setFilterError] = useState("");
+  const [filterError, setFilterError] = useState(false);
 
   const start = (page - 1) * perPage;
   const end = start + perPage;
@@ -41,7 +39,6 @@ export default function Home() {
     data: puzzleList,
     error,
     isError,
-    isLoading,
   } = useQuery<PuzzleType[]>({
     queryKey: ["puzzles"],
     queryFn: () => getAllPuzzles(),
@@ -71,28 +68,18 @@ export default function Home() {
     }
   }, [puzzleList]);
 
-  // console.log("puzzlelist", puzzleList);
-  console.log("puzzles", puzzles);
-  // console.log("paginatedPuzzles", paginatedPuzzles);
-  // console.log("searchparams", searchParams.get("search"));
-  // console.log("pageparams", searchParams.get("page"));
-  // console.log("page homeon", page);
-
   useEffect(() => {
     setPaginatedPuzzles(puzzles.slice(start, end));
   }, [puzzles]);
 
   useEffect(() => {
-    console.log("searchvalues useeffect", searchValue);
-
     if (searchValue !== "") {
       searchParams.set("search", searchValue);
       setSearchParams(searchParams);
     } else {
-      console.log("searchparams delete");
-
       searchParams.delete("search");
       setSearchParams(searchParams);
+      setFilterError(false);
     }
 
     if (searchValue === "" && puzzleList !== undefined) {
@@ -106,10 +93,10 @@ export default function Home() {
           currentPuzzle.brand.toLowerCase().includes(searchValue.toLowerCase())
       );
 
-      console.log("filteredPuzzles", filteredPuzzles);
-
-      if (filteredPuzzles.length === 0) {
-        setFilterError("Not found");
+      if (filteredPuzzles.length === 0 && searchValue !== "") {
+        setFilterError(true);
+      } else {
+        setFilterError(false);
       }
 
       setPuzzles(filteredPuzzles);
@@ -126,9 +113,6 @@ export default function Home() {
 
   useEffect(() => {
     if (page === 1) {
-      // if (Number(searchParams.get("page")) == 1) {
-      console.log("pagedelete fut?", page);
-
       searchParams.delete("page");
       setSearchParams(searchParams);
     } else {
@@ -159,7 +143,12 @@ export default function Home() {
               sx={{ width: "350px" }}
               onChange={(e) => setSearchValue(e.target.value)}
             />
-            {filterError !== "" && <Typography>{filterError}</Typography>}
+            {/* {filterError && (
+              <Box>
+                <Typography>hello</Typography>
+                <img src="sad_puzzle" />
+              </Box>
+            )} */}
           </Box>
 
           <Box
@@ -196,14 +185,52 @@ export default function Home() {
           </Box>
         </>
       ) : (
-        <Grid2
-          container
-          justifyContent="center"
-          alignItems="center"
-          sx={{ height: "100vh" }}
-        >
-          <l-bouncy size="100" speed="1.75" color="#44656e"></l-bouncy>
-        </Grid2>
+        <>
+          {!filterError ? (
+            <Grid2
+              container
+              justifyContent="center"
+              alignItems="center"
+              sx={{ height: "100vh" }}
+            >
+              <l-bouncy size="100" speed="1.75" color="#44656e"></l-bouncy>
+            </Grid2>
+          ) : (
+            <Box
+              sx={{
+                display: "grid",
+                justifyContent: "center",
+                marginTop: "50px",
+              }}
+            >
+              <TextField
+                type="search"
+                placeholder="search..."
+                value={searchValue}
+                size="medium"
+                color="secondary"
+                sx={{ width: "350px" }}
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+              {filterError && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    margin: "auto",
+                    marginTop: "20px",
+                  }}
+                >
+                  <img width="300px" height="300px" src={sadBluePuzzle} />
+                  <Typography sx={{ textAlign: "center" }}>
+                    Looks like we are missing a piece!
+                  </Typography>
+                </Box>
+              )}
+            </Box>
+          )}
+        </>
       )}
     </>
   );
