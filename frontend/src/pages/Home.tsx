@@ -16,7 +16,6 @@ import { useSearchParams } from "react-router-dom";
 import { bouncy } from "ldrs";
 import { PageContext } from "../context/PageContext";
 import { SearchValueContext } from "../context/SearchValueContext";
-import { default as sadPuzzle } from "../assets/sad_puzzle.png";
 import { default as sadBluePuzzle } from "../assets/sadpuzzle2.png";
 
 export default function Home() {
@@ -223,7 +222,9 @@ export default function Home() {
                   }}
                 >
                   <img width="300px" height="300px" src={sadBluePuzzle} />
-                  <Typography sx={{ textAlign: "center" }}>
+                  <Typography
+                    sx={{ textAlign: "center", letterSpacing: "1px" }}
+                  >
                     Looks like we are missing a piece!
                   </Typography>
                 </Box>
