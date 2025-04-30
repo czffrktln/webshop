@@ -22,9 +22,7 @@ export function PageProvider({children}: PageProviderProps) {
 
   const [ searchParams ] = useSearchParams()
   const [ page, setPage ] = useState(Number(searchParams.get("page") ??  1))
-  console.log("page conext page kiertekelodes", page);
   
-
   return (
     <PageContext.Provider value={{page, setPage}}>
       {children}

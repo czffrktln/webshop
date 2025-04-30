@@ -19,8 +19,6 @@ type SearchValueProviderProps = {
 };
 
 export function SearchValueProvider({children}: SearchValueProviderProps) {
-  console.log("searchvalue context fut");
-  
   const [ searchParams ] = useSearchParams()
   const [ searchValue, setSearchValue ] = useState(searchParams.get("search") ??  "")
 

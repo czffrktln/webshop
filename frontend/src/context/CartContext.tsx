@@ -33,8 +33,6 @@ type CartProviderProps = {
 };
 
 export function CartProvider({ children }: CartProviderProps) {
-  // console.log("cartcontext fut");
-
   const [numberOfItems, setNumberOfItems] = useState<number | null>(null);
   const [total, setTotal] = useState<number>(0);
   const [cart, setCart] = useState<CartItemType[] | []>([]);
@@ -46,12 +44,7 @@ export function CartProvider({ children }: CartProviderProps) {
     queryFn: () => getCartBySesionId(sessionId),
   });
 
-  // console.log("isFetching", isFetching);
-  // console.log("currentCart", currentCart);
-  console.log("cart", cart);
-
   useEffect(() => {
-    // console.log("isfetching fut");
     if (!isFetching) setCart(currentCart!.puzzles);
   }, [isFetching]);
 

@@ -3,7 +3,6 @@ import { getAllPuzzles } from "../api/puzzle.service";
 import CardComponents from "../components/Card";
 import { PuzzleType } from "../types";
 import {
-  Avatar,
   Box,
   Grid2,
   Pagination,
@@ -64,8 +63,20 @@ export default function Home() {
       } else {
         setPuzzles(puzzleList);
       }
+      const filteredPuzzles = puzzleList.filter(
+        (currentPuzzle) =>
+          currentPuzzle.title
+            .toLowerCase()
+            .includes(searchValue.toLowerCase()) ||
+          currentPuzzle.brand.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      if (filteredPuzzles.length === 0) {
+        setFilterError(true)
+      }
     }
   }, [puzzleList]);
+
+  
 
   useEffect(() => {
     setPaginatedPuzzles(puzzles.slice(start, end));
