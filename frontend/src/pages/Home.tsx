@@ -1,37 +1,35 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAllPuzzles } from "../api/puzzle.service";
 import CardComponents from "../components/Card";
+import SearchInput from "../components/Inputs/SearchInput";
+import BouncyLoader from "../components/BouncyLoader";
+import { filterPuzzles } from "../utils/filterPuzzles";
 import { PuzzleType } from "../types";
 import {
   Box,
-  Grid2,
   Pagination,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { bouncy } from "ldrs";
 import { PageContext } from "../context/PageContext";
 import { SearchValueContext } from "../context/SearchValueContext";
 import { default as sadBluePuzzle } from "../assets/sadpuzzle2.png";
 
 export default function Home() {
   const { page, setPage } = useContext(PageContext);
-  const { searchValue, setSearchValue } = useContext(SearchValueContext);
+  const { searchValue } = useContext(SearchValueContext);
   const [perPage, setPerPage] = useState(6);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [puzzles, setPuzzles] = useState<PuzzleType[]>([]);
   const [paginatedPuzzles, setPaginatedPuzzles] = useState<PuzzleType[]>([]);
-  const [filterError, setFilterError] = useState(false);
+  const [hasSearchResult, setHasSearchResult] = useState(false);
 
   const start = (page - 1) * perPage;
   const end = start + perPage;
-
-  bouncy.register();
 
   const {
     data: puzzleList,
@@ -50,33 +48,18 @@ export default function Home() {
   useEffect(() => {
     if (puzzleList !== undefined) {
       if (searchValue !== "") {
-        const filteredPuzzles = puzzleList.filter(
-          (currentPuzzle) =>
-            currentPuzzle.title
-              .toLowerCase()
-              .includes(searchValue.toLowerCase()) ||
-            currentPuzzle.brand
-              .toLowerCase()
-              .includes(searchValue.toLowerCase())
-        );
-        setPuzzles(filteredPuzzles);
+        const filteredPuzzles = filterPuzzles(puzzleList, searchValue)
+        if (filteredPuzzles.length === 0) {
+          setHasSearchResult(true)
+        } else {
+          setPuzzles(filteredPuzzles);
+        }
       } else {
         setPuzzles(puzzleList);
-      }
-      const filteredPuzzles = puzzleList.filter(
-        (currentPuzzle) =>
-          currentPuzzle.title
-            .toLowerCase()
-            .includes(searchValue.toLowerCase()) ||
-          currentPuzzle.brand.toLowerCase().includes(searchValue.toLowerCase())
-      );
-      if (filteredPuzzles.length === 0) {
-        setFilterError(true)
       }
     }
   }, [puzzleList]);
 
-  
 
   useEffect(() => {
     setPaginatedPuzzles(puzzles.slice(start, end));
@@ -89,26 +72,18 @@ export default function Home() {
     } else {
       searchParams.delete("search");
       setSearchParams(searchParams);
-      setFilterError(false);
+      setHasSearchResult(false);
     }
 
     if (searchValue === "" && puzzleList !== undefined) {
       setPuzzles(puzzleList);
     } else if (puzzleList !== undefined) {
-      const filteredPuzzles = puzzleList.filter(
-        (currentPuzzle) =>
-          currentPuzzle.title
-            .toLowerCase()
-            .includes(searchValue.toLowerCase()) ||
-          currentPuzzle.brand.toLowerCase().includes(searchValue.toLowerCase())
-      );
-
+      const filteredPuzzles = filterPuzzles(puzzleList, searchValue)
       if (filteredPuzzles.length === 0 && searchValue !== "") {
-        setFilterError(true);
+        setHasSearchResult(true);
       } else {
-        setFilterError(false);
+        setHasSearchResult(false);
       }
-
       setPuzzles(filteredPuzzles);
       setPage(1);
     }
@@ -129,7 +104,6 @@ export default function Home() {
       searchParams.set("page", String(page));
       setSearchParams(searchParams);
     }
-
     setPaginatedPuzzles(puzzles.slice(start, end));
   }, [page]);
 
@@ -144,21 +118,7 @@ export default function Home() {
               marginTop: "50px",
             }}
           >
-            <TextField
-              type="search"
-              placeholder="search..."
-              value={searchValue}
-              size="medium"
-              color="secondary"
-              sx={{ width: "350px" }}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
-            {/* {filterError && (
-              <Box>
-                <Typography>hello</Typography>
-                <img src="sad_puzzle" />
-              </Box>
-            )} */}
+            <SearchInput />
           </Box>
 
           <Box
@@ -183,7 +143,6 @@ export default function Home() {
             }}
           >
             <Stack spacing={2}>
-              {/* <Typography>Page: {page}</Typography> */}
               <Pagination
                 count={Math.ceil(puzzles?.length / perPage)}
                 page={page}
@@ -196,15 +155,8 @@ export default function Home() {
         </>
       ) : (
         <>
-          {!filterError ? (
-            <Grid2
-              container
-              justifyContent="center"
-              alignItems="center"
-              sx={{ height: "100vh" }}
-            >
-              <l-bouncy size="100" speed="1.75" color="#44656e"></l-bouncy>
-            </Grid2>
+          {!hasSearchResult ? (
+            <BouncyLoader />
           ) : (
             <Box
               sx={{
@@ -213,16 +165,8 @@ export default function Home() {
                 marginTop: "50px",
               }}
             >
-              <TextField
-                type="search"
-                placeholder="search..."
-                value={searchValue}
-                size="medium"
-                color="secondary"
-                sx={{ width: "350px" }}
-                onChange={(e) => setSearchValue(e.target.value)}
-              />
-              {filterError && (
+              <SearchInput />
+              {hasSearchResult && (
                 <Box
                   sx={{
                     display: "flex",

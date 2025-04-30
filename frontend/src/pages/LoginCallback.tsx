@@ -1,14 +1,11 @@
 import { useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { bouncy } from "ldrs";
+import BouncyLoader from "../components/BouncyLoader";
 import { UserContext } from "../context/UserContext";
 import { decodeToken } from "../utils/decodeToken";
-import { Grid2 } from "@mui/material";
 
 export default function LoginCallback() {
-  bouncy.register();
-  
   const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const hasSentCode = useRef(false);
@@ -33,13 +30,6 @@ export default function LoginCallback() {
   }, []);
 
   return (
-    <Grid2
-      container
-      justifyContent="center"
-      alignItems="center"
-      sx={{ height: "100vh" }}
-    >
-      <l-bouncy size="100" speed="1.75" color="#44656e"></l-bouncy>
-    </Grid2>
+    <BouncyLoader />
   );
 }
