@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAllPuzzles } from "../api/puzzle.service";
-import CardComponents from "../components/Card";
+import CardComponent from "../components/Card";
 import SearchInput from "../components/Inputs/SearchInput";
 import BouncyLoader from "../components/BouncyLoader";
 import { filterPuzzles } from "../utils/filterPuzzles";
@@ -132,7 +132,7 @@ export default function Home() {
             }}
           >
             {paginatedPuzzles.map((puzzle) => (
-              <CardComponents key={puzzle._id} puzzle={puzzle} />
+              <CardComponent key={puzzle._id} puzzle={puzzle} />
             ))}
           </Box>
           <Box

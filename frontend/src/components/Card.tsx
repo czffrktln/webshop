@@ -3,15 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { PuzzleType } from "../types";
 import { CartContext } from "../context/CartContext";
 import { Card, Typography, Box, Button } from "@mui/material";
+import QuantitySelectorButton from "./Buttons/QuantitySelectorButton";
 
 interface PuzzleProps {
   puzzle: PuzzleType;
 }
 
-export default function CardComponents({ puzzle }: PuzzleProps) {
+export default function CardComponent({ puzzle }: PuzzleProps) {
   const { title, image_link, brand, price, _id } = puzzle;
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, cart } = useContext(CartContext);
   const navigate = useNavigate();
+ 
+  const [currentItem] = cart.filter(item => item.puzzle._id === _id)
 
   return (
     <Card
@@ -63,14 +66,19 @@ export default function CardComponents({ puzzle }: PuzzleProps) {
       </Box>
 
       <Box sx={{ my: 2, height: "15%" }}>
-        <Button
-          variant="contained"
-          onClick={() =>
-            addToCart(puzzle)
-          }
-        >
-          Add to cart
-        </Button>
+        {currentItem
+        ? 
+          <QuantitySelectorButton cartItem={currentItem} /> 
+        : 
+          <Button
+            variant="contained"
+            onClick={() =>
+              addToCart(puzzle)
+            }
+          >
+            Add to cart
+          </Button>
+        }
       </Box>
     </Card>
   );
