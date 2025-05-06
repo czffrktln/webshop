@@ -33,9 +33,12 @@ type CartProviderProps = {
 };
 
 export function CartProvider({ children }: CartProviderProps) {
+
   const [numberOfItems, setNumberOfItems] = useState<number | null>(null);
   const [total, setTotal] = useState<number>(0);
   const [cart, setCart] = useState<CartItemType[] | []>([]);
+  
+  console.log("cart", cart);
 
   const sessionId = checkCookie();
 
@@ -48,20 +51,21 @@ export function CartProvider({ children }: CartProviderProps) {
     if (!isFetching) setCart(currentCart!.puzzles);
   }, [isFetching]);
 
-  const onCartMutation = useMutation({
-    mutationFn: (currentCart: CartType) => writeCurrentCart(currentCart),
-    onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ["cart"] });
-    },
-  });
+  // const onCartMutation = useMutation({
+  //   mutationFn: (currentCart: CartType) => writeCurrentCart(currentCart),
+  //   onSuccess: () => {
+  //     // queryClient.invalidateQueries({ queryKey: ["cart"] });
+  //   },
+  // });
 
   useEffect(() => {
-    if (cart.length !== 0) {
-      onCartMutation.mutate({
-        session_id: getCookie("sessionId"),
-        puzzles: cart,
-      });
-    }
+    // if (cart.length !== 0) {
+      // onCartMutation.mutate({
+      //   session_id: getCookie("sessionId"),
+      //   puzzles: cart,
+      //   // user_id: null
+      // });
+    // }
 
     const totalCartItems = cart.reduce<number>((acc, currentValue) => {
       acc += currentValue.quantity;

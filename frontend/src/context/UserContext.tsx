@@ -23,6 +23,9 @@ export function UserProvider({ children }: UserContextProviderProps) {
 
   const [user, setUser] = useState<UserType | null>(null);
 
+  console.log("user", user);
+  
+
   useEffect(() => {
     const token = sessionStorage.getItem('token')
     if (token) setUser(decodeToken(token))

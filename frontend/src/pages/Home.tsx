@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getAllPuzzles } from "../api/puzzle.service";
 import CardComponent from "../components/Card";
 import SearchInput from "../components/Inputs/SearchInput";
 import BouncyLoader from "../components/BouncyLoader";
 import { filterPuzzles } from "../utils/filterPuzzles";
-import { PuzzleType } from "../types";
+import { CartType, PuzzleType } from "../types";
 import {
   Box,
   Pagination,
@@ -16,8 +16,35 @@ import { useSearchParams } from "react-router-dom";
 import { PageContext } from "../context/PageContext";
 import { SearchValueContext } from "../context/SearchValueContext";
 import { default as sadBluePuzzle } from "../assets/sadpuzzle2.png";
+import { UserContext } from "../context/UserContext";
+import { writeCurrentCart } from "../api/cart.service";
+import { getCookie } from "../utils/cookies";
+import { CartContext } from "../context/CartContext";
+import useCartMutation from "../hooks/useCartMutation";
 
 export default function Home() {
+  const { user } = useContext(UserContext)
+  const { cart } = useContext(CartContext)
+
+  // const onCartMutation = useMutation({
+  //   mutationFn: (currentCart: CartType) => writeCurrentCart(currentCart)
+  // });
+
+  useCartMutation()
+
+  useEffect(() => {
+    console.log("uj user useeffect fut");
+    
+
+    // if (user) {
+      // onCartMutation.mutate({
+      //   session_id: getCookie("sessionId"),
+      //   puzzles: cart,
+      //   user_id: user ? user._id : null
+      // });
+    // }
+  }, [user])
+
   const { page, setPage } = useContext(PageContext);
   const { searchValue } = useContext(SearchValueContext);
   const [perPage, setPerPage] = useState(6);
