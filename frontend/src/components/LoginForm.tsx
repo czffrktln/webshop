@@ -45,6 +45,9 @@ export default function LoginForm({
   setIsNewUserLogin,
 }: SignInFormPropsType) {
   const [authenticationError, setAuthenticationError] = useState(false);
+
+  console.log("authenticationerror", authenticationError);
+  
   const { setUser } = useContext(UserContext);
 
   const { control, formState, handleSubmit, reset, watch } =
@@ -68,11 +71,9 @@ export default function LoginForm({
       reset();
       handleCloseModal();
     },
-    onError: (error: unknown) => {
-      if (typeof error === "object" && error !== null && "status" in error) {
-        if (error.status === 403) setAuthenticationError(true);
-      }
-      console.log(error);
+    onError: (error: string) => {
+      console.log("error", error);
+      setAuthenticationError(true);
     },
   });
 
@@ -81,6 +82,8 @@ export default function LoginForm({
   };
 
   useEffect(() => {
+    console.log("watch fut");
+    
     setAuthenticationError(false);
   }, [watchEmail, watchPassword]);
 

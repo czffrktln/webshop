@@ -72,11 +72,9 @@ export default function SignUpForm({
       reset();
       handleCloseModal();
     },
-    onError: (error: unknown) => {
-      if (typeof error === "object" && error !== null && "status" in error) {
-        if (error.status === 403) setEmailError(true);
-      }
+    onError: (error: string) => {
       console.log(error);
+      setEmailError(true)
     },
   });
 
