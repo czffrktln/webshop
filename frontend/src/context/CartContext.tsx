@@ -1,8 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import { CartItemType, CartType, PuzzleType } from "../types";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { getCartBySesionId, writeCurrentCart } from "../api/cart.service";
-import { checkCookie, getCookie } from "../utils/cookies";
+import { useQuery } from "@tanstack/react-query";
+import { getCartBySesionId } from "../api/cart.service";
+import { checkCookie } from "../utils/cookies";
 
 interface CartContextType {
   cart: CartItemType[] | [];
@@ -38,8 +38,6 @@ export function CartProvider({ children }: CartProviderProps) {
   const [total, setTotal] = useState<number>(0);
   const [cart, setCart] = useState<CartItemType[] | []>([]);
   
-  console.log("cart", cart);
-
   const sessionId = checkCookie();
 
   const { data: currentCart, isFetching } = useQuery<CartType>({
@@ -51,28 +49,12 @@ export function CartProvider({ children }: CartProviderProps) {
     if (!isFetching) setCart(currentCart!.puzzles);
   }, [isFetching]);
 
-  // const onCartMutation = useMutation({
-  //   mutationFn: (currentCart: CartType) => writeCurrentCart(currentCart),
-  //   onSuccess: () => {
-  //     // queryClient.invalidateQueries({ queryKey: ["cart"] });
-  //   },
-  // });
-
   useEffect(() => {
-    // if (cart.length !== 0) {
-      // onCartMutation.mutate({
-      //   session_id: getCookie("sessionId"),
-      //   puzzles: cart,
-      //   // user_id: null
-      // });
-    // }
-
     const totalCartItems = cart.reduce<number>((acc, currentValue) => {
       acc += currentValue.quantity;
       return acc;
     }, 0);
     setNumberOfItems(totalCartItems);
-    // sessionStorage.setItem("cart", JSON.stringify(cart));
 
     const totalAmount = cart.reduce<number>((acc, currentValue) => {
       acc += Number(currentValue.puzzle.price) * currentValue.quantity;
