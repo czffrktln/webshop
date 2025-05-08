@@ -7,7 +7,9 @@ import { filterPuzzles } from "../utils/filterPuzzles";
 import { PuzzleType } from "../types";
 import {
   Box,
+  MenuItem,
   Pagination,
+  Select,
   Stack,
   Typography,
 } from "@mui/material";
@@ -19,12 +21,11 @@ import { default as sadBluePuzzle } from "../assets/sadpuzzle2.png";
 import useCartMutation from "../hooks/useCartMutation";
 
 export default function Home() {
-
-  useCartMutation()
+  useCartMutation();
 
   const { page, setPage } = useContext(PageContext);
   const { searchValue } = useContext(SearchValueContext);
-  const [perPage, setPerPage] = useState(6);
+  const [perPage, setPerPage] = useState(12);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -49,12 +50,17 @@ export default function Home() {
     // return <ErrorPage/>
   }
 
+  function handleOnPerPageChange(e) {
+    setPerPage(Number(e.target.value));
+    setPage(1);
+  }
+
   useEffect(() => {
     if (puzzleList !== undefined) {
       if (searchValue !== "") {
-        const filteredPuzzles = filterPuzzles(puzzleList, searchValue)
+        const filteredPuzzles = filterPuzzles(puzzleList, searchValue);
         if (filteredPuzzles.length === 0) {
-          setHasSearchResult(true)
+          setHasSearchResult(true);
         } else {
           setPuzzles(filteredPuzzles);
         }
@@ -63,7 +69,6 @@ export default function Home() {
       }
     }
   }, [puzzleList]);
-
 
   useEffect(() => {
     setPaginatedPuzzles(puzzles.slice(start, end));
@@ -82,7 +87,7 @@ export default function Home() {
     if (searchValue === "" && puzzleList !== undefined) {
       setPuzzles(puzzleList);
     } else if (puzzleList !== undefined) {
-      const filteredPuzzles = filterPuzzles(puzzleList, searchValue)
+      const filteredPuzzles = filterPuzzles(puzzleList, searchValue);
       if (filteredPuzzles.length === 0 && searchValue !== "") {
         setHasSearchResult(true);
       } else {
@@ -109,7 +114,7 @@ export default function Home() {
       setSearchParams(searchParams);
     }
     setPaginatedPuzzles(puzzles.slice(start, end));
-  }, [page]);
+  }, [page, perPage]);
 
   return (
     <>
@@ -156,6 +161,22 @@ export default function Home() {
               />
             </Stack>
           </Box>
+
+          {/*  */}
+          <Select
+            value={perPage}
+            onChange={(e) => handleOnPerPageChange(e)}
+            displayEmpty
+            inputProps={{ "aria-label": "Without label" }}
+          >
+            {/* <MenuItem value="">
+              <em>None</em>
+            </MenuItem> */}
+            <MenuItem value={12}>12</MenuItem>
+            <MenuItem value={24}>24</MenuItem>
+            <MenuItem value={36}>36</MenuItem>
+          </Select>
+          {/*  */}
         </>
       ) : (
         <>
