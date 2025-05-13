@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { CSSProperties, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentPuzzle } from "../api/puzzle.service";
@@ -10,15 +10,19 @@ export default function Product() {
   const { id } = useParams();
   const { addToCart } = useContext(CartContext);
 
-  const { data: currentPuzzle, isError, error } = useQuery<PuzzleType>({
-    queryKey: ['puzzle', id],
-    queryFn: () => getCurrentPuzzle(id!)
-  })
+  const {
+    data: currentPuzzle,
+    isError,
+    error,
+  } = useQuery<PuzzleType>({
+    queryKey: ["puzzle", id],
+    queryFn: () => getCurrentPuzzle(id!),
+  });
 
   if (isError) {
     console.log(error);
     // return <ErrorPage/>
-  } 
+  }
 
   return (
     <>
@@ -31,29 +35,10 @@ export default function Product() {
             justifyContent={"center"}
           >
             <Grid2 size={{ xs: 12, sm: 6 }}>
-              <img
-                src={currentPuzzle.image_link}
-                style={{
-                  objectFit: "contain",
-                  maxWidth: "100%",
-                }}
-              />
+              <img src={currentPuzzle.image_link} style={imageStyle} />
             </Grid2>
 
-            <Grid2
-              sx={{
-                // border: "2px solid red",
-                display: "Flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "left",
-                gap: 2,
-                px: 2,
-              }}
-              size={{ xs: 12, sm: 6 }}
-            >
-              {/* //width: "45%" */}
+            <Grid2 sx={style.puzzleDetails} size={{ xs: 12, sm: 6 }}>
               <Box sx={{ width: "100%" }}>
                 <Typography variant="h4" fontSize="2.5rem">
                   {currentPuzzle.title} - {currentPuzzle.pieces} pieces
@@ -78,14 +63,7 @@ export default function Product() {
                   {currentPuzzle.price} Ft
                 </Typography>
               </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-start",
-
-                  width: "100%",
-                }}
-              >
+              <Box sx={style.addToCartButtonBox}>
                 <Button
                   variant="contained"
                   onClick={() => addToCart(currentPuzzle)}
@@ -100,3 +78,25 @@ export default function Product() {
     </>
   );
 }
+
+const imageStyle: CSSProperties = {
+  objectFit: "contain",
+  maxWidth: "100%",
+};
+
+const style = {
+  puzzleDetails: {
+    display: "Flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "left",
+    gap: 2,
+    px: 2,
+  },
+  addToCartButtonBox: {
+    display: "flex",
+    justifyContent: "flex-start",
+    width: "100%",
+  },
+};
