@@ -10,6 +10,7 @@ import {
   MenuItem,
   Pagination,
   Select,
+  SelectChangeEvent,
   Stack,
   Typography,
 } from "@mui/material";
@@ -50,7 +51,7 @@ export default function Home() {
     // return <ErrorPage/>
   }
 
-  function handleOnPerPageChange(e) {
+  function handleOnPerPageChange(e: SelectChangeEvent<number>) {
     setPerPage(Number(e.target.value));
     setPage(1);
   }
@@ -122,7 +123,7 @@ export default function Home() {
         <>
           <Box
             sx={{
-              display: "grid",
+              display: "flex",
               justifyContent: "center",
               marginTop: "50px",
             }}
@@ -148,7 +149,8 @@ export default function Home() {
             sx={{
               display: "flex",
               justifyContent: "center",
-              marginY: "50px",
+              marginTop: "50px",
+              marginBottom: "25px",
             }}
           >
             <Stack spacing={2}>
@@ -162,21 +164,30 @@ export default function Home() {
             </Stack>
           </Box>
 
-          {/*  */}
-          <Select
-            value={perPage}
-            onChange={(e) => handleOnPerPageChange(e)}
-            displayEmpty
-            inputProps={{ "aria-label": "Without label" }}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: "20px",
+            }}
           >
-            {/* <MenuItem value="">
-              <em>None</em>
-            </MenuItem> */}
-            <MenuItem value={12}>12</MenuItem>
-            <MenuItem value={24}>24</MenuItem>
-            <MenuItem value={36}>36</MenuItem>
-          </Select>
-          {/*  */}
+            <Typography sx={{ letterSpacing: "1px" }}>View: </Typography>
+            <Select
+              size="small"
+              value={perPage}
+              onChange={(e) => handleOnPerPageChange(e)}
+              displayEmpty
+              inputProps={{ "aria-label": "Without label" }}
+              sx={{
+                ".MuiOutlinedInput-notchedOutline": { borderStyle: "none" },
+              }}
+            >
+              <MenuItem value={12}>12</MenuItem>
+              <MenuItem value={24}>24</MenuItem>
+              <MenuItem value={36}>36</MenuItem>
+            </Select>
+          </Box>
         </>
       ) : (
         <>

@@ -1,10 +1,9 @@
-import { TextField } from "@mui/material"
-import { useContext } from "react"
-import { SearchValueContext } from "../../context/SearchValueContext"
+import { TextField } from "@mui/material";
+import { useContext } from "react";
+import { SearchValueContext } from "../../context/SearchValueContext";
 
 function SearchInput() {
-
-  const { searchValue, setSearchValue } = useContext(SearchValueContext)
+  const { searchValue, setSearchValue } = useContext(SearchValueContext);
 
   return (
     <>
@@ -18,7 +17,7 @@ function SearchInput() {
         onChange={(e) => setSearchValue(e.target.value)}
       />
     </>
-  )
+  );
 }
 
-export default SearchInput
+export default SearchInput;
