@@ -5,10 +5,12 @@ import { getCurrentPuzzle } from "../api/puzzle.service";
 import { CartContext } from "../context/CartContext";
 import { PuzzleType } from "../types";
 import { Box, Button, Container, Grid2, Typography } from "@mui/material";
+import { UserContext } from "../context/UserContext";
+import QuantitySelectorButton from "../components/Buttons/QuantitySelectorButton";
 
 export default function Product() {
   const { id } = useParams();
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, cart } = useContext(CartContext);
 
   const {
     data: currentPuzzle,
@@ -18,6 +20,8 @@ export default function Product() {
     queryKey: ["puzzle", id],
     queryFn: () => getCurrentPuzzle(id!),
   });
+
+  const [currentItem] = cart.filter((item) => item.puzzle._id === id);
 
   if (isError) {
     console.log(error);
@@ -64,12 +68,16 @@ export default function Product() {
                 </Typography>
               </Box>
               <Box sx={style.addToCartButtonBox}>
-                <Button
-                  variant="contained"
-                  onClick={() => addToCart(currentPuzzle)}
-                >
-                  Add to cart
-                </Button>
+                {currentItem ? (
+                  <QuantitySelectorButton cartItem={currentItem} />
+                ) : (
+                  <Button
+                    variant="contained"
+                    onClick={() => addToCart(currentPuzzle)}
+                  >
+                    Add to cart
+                  </Button>
+                )}
               </Box>
             </Grid2>
           </Grid2>
