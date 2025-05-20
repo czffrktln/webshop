@@ -10,7 +10,7 @@ const puzzleSchema = new Schema(
     size: String,
     available: Boolean,
     image_link: String,
-    category: [],
+    category: [String],
     rating: String,
     review: String
   }

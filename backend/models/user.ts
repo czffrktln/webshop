@@ -6,7 +6,8 @@ const userSchema = new Schema({
   sub: String,
   picture: String,
   given_name: String,
-  password: String
+  password: String,
+  orders: [{type: mongoose.Schema.Types.ObjectId, ref: "Order"}],
 }, {
   timestamps: true
 })

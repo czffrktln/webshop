@@ -15,6 +15,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 
+// #EF959D lazac
+// #E7F59E cetli
+// #A5BE00 alma
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -24,6 +28,9 @@ const theme = createTheme({
     secondary: {
       main: "#9BC4CB",
     },
+    warning: {
+      main: "#EF959D"
+    }
   },
 });
 
