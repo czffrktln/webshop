@@ -1,5 +1,5 @@
-import { Box, Button, Container, Grid2, Snackbar, SnackbarContent, Typography } from "@mui/material";
-import { SnackbarOrigin } from '@mui/material/Snackbar';
+import { Box, Button, Container, Grid2, Typography } from "@mui/material";
+import { SnackbarOrigin } from "@mui/material/Snackbar";
 import { CartContext } from "../context/CartContext";
 import { useContext, useState } from "react";
 import CartItem from "../components/CartItem";
@@ -8,42 +8,47 @@ import { CartItemType, CartType } from "../types";
 import sendOrder from "../api/order.service";
 import { getCookie } from "../utils/cookies";
 import { UserContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
+import SnackBarComponent from "../components/SnackBarComponent";
 
 interface SnackbarState extends SnackbarOrigin {
   open: boolean;
 }
 
-
 export default function Cart() {
-  const { cart, total } = useContext(CartContext);
-  const { user } = useContext(UserContext)
-  const [ snackbarState, setSnackbarState ] = useState<SnackbarState>({
+  const { cart, total, setCart } = useContext(CartContext);
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+  const [snackbarState, setSnackbarState] = useState<SnackbarState>({
     open: false,
-    vertical: 'top',
-    horizontal: 'center',
+    vertical: "top",
+    horizontal: "center",
   });
-  const { vertical, horizontal, open } = snackbarState;
 
   const onOrderMutation = useMutation({
-    mutationFn: (cart: CartType) => sendOrder(cart)
+    mutationFn: (cart: CartType) => sendOrder(cart),
+    onSuccess: () => {
+      console.log("sikerült az order");
+      navigate("/");
+      setCart([]);
+    },
   });
-  
+
   function sendOrderClick(cart: CartItemType[]) {
     if (!user) {
-      setSnackbarState((newState: SnackbarOrigin) => ({ ...newState, open: true }));
+      setSnackbarState((newState: SnackbarOrigin) => ({
+        ...newState,
+        open: true,
+      }));
     } else {
       onOrderMutation.mutate({
         session_id: getCookie("sessionId"),
         puzzles: cart,
-        user_id: user._id
-      })
+        user_id: user._id,
+      });
     }
   }
-  
-  const handleSnackbarClose = () => {
-    setSnackbarState({ ...snackbarState, open: false });
-  };
-  
+
   return (
     <Container>
       <Grid2 container spacing={{ xs: 5, md: 8 }}>
@@ -62,20 +67,18 @@ export default function Cart() {
           <Typography sx={style.subtotalText} fontWeight="600">
             Subtotal: {total} HUF
           </Typography>
-          <Button variant="contained" onClick={() => sendOrderClick(cart)}>ORDER</Button>
+          <Button variant="contained" onClick={() => sendOrderClick(cart)}>
+            ORDER
+          </Button>
         </Grid2>
       </Grid2>
-      <Snackbar
-        anchorOrigin={{ vertical, horizontal }}
-        open={open}
-        onClose={handleSnackbarClose}
-        key={vertical + horizontal}
-        autoHideDuration={5000}
-        >
-        <SnackbarContent sx={style.snackBarContent}
+
+      <SnackBarComponent
         message="You must log in to order"
-        />
-      </Snackbar>
+        style={style.snackBarContent}
+        snackbarState={snackbarState}
+        setSnackbarState={setSnackbarState}
+      />
     </Container>
   );
 }
@@ -91,6 +94,6 @@ const style = {
   subtotalText: { marginTop: "20px" },
   snackBarContent: {
     bgcolor: "warning.main",
-    color: 'black'
-  }
+    color: "black",
+  },
 };

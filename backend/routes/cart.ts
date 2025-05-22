@@ -30,8 +30,7 @@ router.post("/", async (req: Request, res: Response) => {
     quantity: puzzleItem.quantity,
   }));
 
-  console.log("puzzlesArrayToDatabase", puzzlesArrayToDatabase);
-  
+  // console.log("puzzlesArrayToDatabase", puzzlesArrayToDatabase);
 
   const existingCart = await Cart.findOne({ session_id: session_id });
   if (!existingCart) {
@@ -39,7 +38,7 @@ router.post("/", async (req: Request, res: Response) => {
       session_id: session_id,
       puzzles: puzzlesArrayToDatabase,
     });
-    console.log("newcart", newCart);
+    // console.log("newcart", newCart);
     // if (!newCart) return res
     return res.sendStatus(200);
   } else {
@@ -47,7 +46,7 @@ router.post("/", async (req: Request, res: Response) => {
       existingCart._id,
       req.body
     );
-    console.log("updatedcart", updatedCart);
+    // console.log("updatedcart", updatedCart);
 
     const updatedCartToSend = await Cart.findOne({
       session_id: session_id,
@@ -64,17 +63,17 @@ router.post("/", async (req: Request, res: Response) => {
 router.get("/:id", async (req: Request, res: Response) => {
   const session_id = req.params.id;
 
-  console.log("session_id getből", session_id);
+  // console.log("session_id getből", session_id);
 
   const existingCart = await Cart.findOne({ session_id: session_id }).populate({
-    path: "puzzles.puzzle"
+    path: "puzzles.puzzle",
   });
 
-  console.log("EXISTING cart", existingCart);
+  // console.log("EXISTING cart", existingCart);
 
   if (!existingCart) {
-    const newCart = await Cart.create({session_id: session_id, puzzles: []})
-    res.send(newCart)
+    const newCart = await Cart.create({ session_id: session_id, puzzles: [] });
+    res.send(newCart);
   } else {
     res.send(existingCart);
   }
