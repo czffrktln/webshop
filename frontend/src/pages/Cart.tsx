@@ -24,11 +24,17 @@ export default function Cart() {
     vertical: "top",
     horizontal: "center",
   });
+  const [ snackbarMessage, setSnackbarMessage ] = useState("")
 
   const onOrderMutation = useMutation({
     mutationFn: (cart: CartType) => sendOrder(cart),
     onSuccess: () => {
       console.log("sikerült az order");
+      setSnackbarMessage("Your order has been sent")
+      setSnackbarState((newState: SnackbarOrigin) => ({
+        ...newState,
+        open: true,
+      }));
       navigate("/");
       setCart([]);
     },
@@ -36,6 +42,7 @@ export default function Cart() {
 
   function sendOrderClick(cart: CartItemType[]) {
     if (!user) {
+      setSnackbarMessage("You must log in to order")
       setSnackbarState((newState: SnackbarOrigin) => ({
         ...newState,
         open: true,
@@ -74,7 +81,7 @@ export default function Cart() {
       </Grid2>
 
       <SnackBarComponent
-        message="You must log in to order"
+        message={snackbarMessage}
         style={style.snackBarContent}
         snackbarState={snackbarState}
         setSnackbarState={setSnackbarState}
