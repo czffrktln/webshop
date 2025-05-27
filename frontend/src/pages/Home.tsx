@@ -20,12 +20,20 @@ import { PageContext } from "../context/PageContext";
 import { SearchValueContext } from "../context/SearchValueContext";
 import { default as sadBluePuzzle } from "../assets/sadpuzzle2.png";
 import useCartMutation from "../hooks/useCartMutation";
+import SnackBarComponent from "../components/SnackBarComponent";
+import { SnackbarContext } from "../context/SnackbarContext";
 
 export default function Home() {
   useCartMutation();
 
   const { page, setPage } = useContext(PageContext);
   const { searchValue } = useContext(SearchValueContext);
+  const {
+    snackbarState,
+    setSnackbarState,
+    snackbarMessage,
+    setSnackbarMessage,
+  } = useContext(SnackbarContext);
   const [perPage, setPerPage] = useState(12);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -224,6 +232,19 @@ export default function Home() {
           )}
         </>
       )}
+      <SnackBarComponent
+        message={snackbarMessage}
+        style={style.snackBarContent}
+        snackbarState={snackbarState}
+        setSnackbarState={setSnackbarState}
+      />
     </>
   );
 }
+
+const style = {
+  snackBarContent: {
+    bgcolor: "#E7F59E",
+    color: "black",
+  },
+};

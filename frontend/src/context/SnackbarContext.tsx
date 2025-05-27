@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction, useState } from "react";
+import { createContext, useState } from "react";
 import { SnackbarOrigin } from "@mui/material/Snackbar";
 
 interface SnackbarState extends SnackbarOrigin {
@@ -7,9 +7,9 @@ interface SnackbarState extends SnackbarOrigin {
 
 interface SnackbarContextType {
   snackbarState: SnackbarState;
-  setSnackbarState: (snackbarState: SnackbarState) => void;
-  snackbarMessage: string,
-  setSnackbarMessage: Dispatch<SetStateAction<string>>
+  setSnackbarState: (value: SnackbarState) => void;
+  snackbarMessage: string;
+  setSnackbarMessage: (value: string) => void;
 }
 
 const defaultState: SnackbarContextType = {
@@ -18,14 +18,10 @@ const defaultState: SnackbarContextType = {
     vertical: "top",
     horizontal: "center",
   },
-  // setSnackbarState: () => {},
-};
-
-const messageDefaultState = {
+  setSnackbarState: (value) => value,
   snackbarMessage: "",
-  setSnackbarMessage: () => {}
-
-}
+  setSnackbarMessage: (newMessage) => newMessage,
+};
 
 export const SnackbarContext = createContext(defaultState);
 
@@ -34,11 +30,23 @@ type SnackbarProviderProps = {
 };
 
 export function SnackbarProvider({ children }: SnackbarProviderProps) {
-  const [snackbarState, setSnackbarState] = useState<SnackbarState>(defaultState);
-  const [ snackbarMessage, setSnackbarMessage ] = useState("")
+  const [snackbarState, setSnackbarState] = useState<SnackbarState>({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
+  console.log("snacki context open:", snackbarState.open);
   return (
-    <SnackbarContext.Provider value={{ snackbarState, snackbarMessage, setSnackbarMessage }}>
+    <SnackbarContext.Provider
+      value={{
+        snackbarState,
+        setSnackbarState,
+        snackbarMessage,
+        setSnackbarMessage,
+      }}
+    >
       {children}
     </SnackbarContext.Provider>
   );
