@@ -1,20 +1,16 @@
 import { Box, Button, Container, Grid2, Typography } from "@mui/material";
-import { SnackbarOrigin } from "@mui/material/Snackbar";
 import { CartContext } from "../context/CartContext";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import CartItem from "../components/CartItem";
 import { useMutation } from "@tanstack/react-query";
 import { CartItemType, CartType } from "../types";
-import sendOrder from "../api/order.service";
+import { sendOrder } from "../api/order.service";
 import { getCookie } from "../utils/cookies";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import SnackBarComponent from "../components/SnackBarComponent";
 import { SnackbarContext } from "../context/SnackbarContext";
 
-interface SnackbarState extends SnackbarOrigin {
-  open: boolean;
-}
 
 export default function Cart() {
   const { cart, total, setCart } = useContext(CartContext);
@@ -26,12 +22,7 @@ export default function Cart() {
   } = useContext(SnackbarContext);
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
-  // const [snackbarState, setSnackbarState] = useState<SnackbarState>({
-  //   open: false,
-  //   vertical: "top",
-  //   horizontal: "center",
-  // });
-  // const [snackbarMessage, setSnackbarMessage] = useState("");
+
 
   const onOrderMutation = useMutation({
     mutationFn: (cart: CartType) => sendOrder(cart),

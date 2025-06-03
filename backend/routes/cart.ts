@@ -15,7 +15,6 @@ type PuzzleType2 = {
 };
 
 router.post("/", async (req: Request, res: Response) => {
-  console.log("req.body", req.body);
   const { session_id, puzzles } = req.body;
 
   // const puzzleArray = puzzles.map((item: any) => ({
@@ -30,7 +29,6 @@ router.post("/", async (req: Request, res: Response) => {
     quantity: puzzleItem.quantity,
   }));
 
-  // console.log("puzzlesArrayToDatabase", puzzlesArrayToDatabase);
 
   const existingCart = await Cart.findOne({ session_id: session_id });
   if (!existingCart) {
@@ -46,7 +44,6 @@ router.post("/", async (req: Request, res: Response) => {
       existingCart._id,
       req.body
     );
-    // console.log("updatedcart", updatedCart);
 
     const updatedCartToSend = await Cart.findOne({
       session_id: session_id,
@@ -63,13 +60,9 @@ router.post("/", async (req: Request, res: Response) => {
 router.get("/:id", async (req: Request, res: Response) => {
   const session_id = req.params.id;
 
-  // console.log("session_id getből", session_id);
-
   const existingCart = await Cart.findOne({ session_id: session_id }).populate({
     path: "puzzles.puzzle",
   });
-
-  // console.log("EXISTING cart", existingCart);
 
   if (!existingCart) {
     const newCart = await Cart.create({ session_id: session_id, puzzles: [] });

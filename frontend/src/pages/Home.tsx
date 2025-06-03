@@ -32,7 +32,6 @@ export default function Home() {
     snackbarState,
     setSnackbarState,
     snackbarMessage,
-    setSnackbarMessage,
   } = useContext(SnackbarContext);
   const [perPage, setPerPage] = useState(12);
 

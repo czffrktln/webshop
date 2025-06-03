@@ -62,12 +62,17 @@ export default function Header() {
     setAnchorEl(null);
   };
 
+  const handleProfileClick = () => {
+    setAnchorEl(null)
+    navigate(`/profile/${user._id}`)
+  }
+
   const handleLogout = () => {
+    navigate("/");
     setAnchorEl(null);
     setUser(null);
     setCart([]);
     sessionStorage.removeItem("token");
-    navigate("/");
   };
 
   function handleHomePageRedirect() {
@@ -132,7 +137,7 @@ export default function Header() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </Box>
