@@ -104,7 +104,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 
                       <TableCell align="center">{detailsRow.amount}</TableCell>
                       <TableCell align="center">
-                        {detailsRow.totalPrice}
+                        {formatPrice(detailsRow.totalPrice)} HUF
                       </TableCell>
 
                       <TableCell align="center">
@@ -133,15 +133,6 @@ export default function OrdersTable({ tableData }: TableDataPropsType) {
   console.log("tableData in table", tableData);
 
   const rows = tableData.map(({ orderId, date, total, puzzles }) => {
-    // const subOrderDetail = puzzles.map(({quantity, {image_link, brand, title, price}}) =>({
-    //   image: image_link,
-    //   brand,
-    //   puzzleName: title,
-    //   amount: quantity,
-    //   totalPrice: price * quantity,
-    // })
-    // );
-
     const subOrderDetail = puzzles.map((currentPuzzle) => ({
       image: currentPuzzle.puzzle.image_link,
       brand: currentPuzzle.puzzle.brand,
@@ -168,7 +159,7 @@ export default function OrdersTable({ tableData }: TableDataPropsType) {
               <TableHead>
                 <TableRow>
                   <TableCell />
-                  {/* <TableCell>Orders</TableCell> */}
+
                   <TableCell align="center">Order ID</TableCell>
                   <TableCell align="center">Date</TableCell>
                   <TableCell align="center">Total</TableCell>

@@ -5,6 +5,7 @@ import { getOrdersByUser } from "../api/order.service";
 import { useParams } from "react-router-dom";
 import OrdersTable from "../components/OrdersTable";
 import { OrderToTableType, OrderType } from "../types";
+import { Typography } from "@mui/material";
 
 function Profile() {
   const { user } = useContext(UserContext);
@@ -38,7 +39,16 @@ function Profile() {
 
   return (
     <>
-      <h1>Hello {given_name}!</h1>
+      {/* <Typography variant="h5">Hello {given_name}!</Typography> */}
+      <Typography
+        variant="h5"
+        align="center"
+        marginTop="20px"
+        sx={{ letterSpacing: "1px" }}
+      >
+        Order history
+      </Typography>
+
       {tableData.length && <OrdersTable tableData={tableData} />}
     </>
   );
