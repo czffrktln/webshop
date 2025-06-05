@@ -16,6 +16,7 @@ const orderSchema = new Schema(
       ],
       session_id: String,
       user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      cart_total: Number
     },
 
     contacts: {

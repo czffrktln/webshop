@@ -9,7 +9,7 @@ import { getCookie } from "../utils/cookies"
 function useCartMutation() {
 
   const { user } = useContext(UserContext)
-  const { cart } = useContext(CartContext)
+  const { cart, total } = useContext(CartContext)
 
   const onCartMutation = useMutation({
     mutationFn: (currentCart: CartType) => writeCurrentCart(currentCart)
@@ -19,7 +19,8 @@ function useCartMutation() {
     onCartMutation.mutate({
       session_id: getCookie("sessionId"),
       puzzles: cart,
-      user_id: user ? user._id : null
+      user_id: user ? user._id : null,
+      cart_total: total
     });
   }, [cart, user]) 
 }

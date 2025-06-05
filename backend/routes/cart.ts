@@ -31,6 +31,8 @@ router.post("/", async (req: Request, res: Response) => {
 
 
   const existingCart = await Cart.findOne({ session_id: session_id });
+  console.log("existing cart", existingCart);
+  
   if (!existingCart) {
     const newCart = await Cart.create({
       session_id: session_id,

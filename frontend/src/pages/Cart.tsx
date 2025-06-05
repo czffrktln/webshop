@@ -50,6 +50,7 @@ export default function Cart() {
         session_id: getCookie("sessionId"),
         puzzles: cart,
         user_id: user._id,
+        cart_total: total
       });
     }
   }
