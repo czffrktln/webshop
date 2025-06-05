@@ -37,25 +37,25 @@ export interface CartTypeToDatabase {
 }
 
 export interface CartType {
-  user_id?: string | null,
+  user_id?: string | null;
   session_id: string;
   puzzles: {
     puzzle: PuzzleType;
     quantity: number;
   }[];
-  cart_total: number
+  cart_total: number;
 }
 
 export interface OrderType {
-  cart: CartType,
-  _id: string, 
-  createdAt: Date,
+  cart: CartType;
+  _id: string;
+  createdAt: Date;
 }
 
 export interface OrderToTableType {
-  orderId: string, 
-  date: Date,
-  total: number
+  orderId: string;
+  date: string;
+  total: number;
 }
 
 // export interface CartType {
