@@ -10,11 +10,13 @@ router.post("/", async (req: Request, res: Response) => {
 });
 
 router.get("/:id", async (req: Request, res: Response) => {
-  const { id } = req.params
+  const { id } = req.params;
   console.log("ordersbyid request:", id, new Date());
-  const orders = await Order.find({"cart.user_id": id })
-  
-  res.send(orders)
-} )
+  const orders = await Order.find({ "cart.user_id": id }).populate({
+    path: "cart.puzzles.puzzle",
+  });
+
+  res.send(orders);
+});
 
 export default router;

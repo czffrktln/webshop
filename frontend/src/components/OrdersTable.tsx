@@ -14,33 +14,39 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useState } from "react";
 import { OrderToTableType } from "../types";
 import formatPrice from "../utils/formatPrice";
+import { number } from "zod";
 
 interface TableDataPropsType {
   tableData: OrderToTableType[];
 }
 
-function createData(orderId: string, date: string, total: string) {
+interface TableDetailsType {
+  image: string;
+  brand: string;
+  puzzleName: string;
+  amount: number;
+  totalPrice: number;
+}
+
+function createData(
+  orderId: string,
+  date: string,
+  total: string,
+  details: TableDetailsType[]
+) {
   return {
     orderId,
     date,
     total,
-    history: [
-      {
-        date: "2020-01-05",
-        customerId: "11091700",
-        amount: 3,
-      },
-      {
-        date: "2020-01-02",
-        customerId: "Anonymous",
-        amount: 1,
-      },
-    ],
+    details,
   };
 }
 
 function Row(props: { row: ReturnType<typeof createData> }) {
   const { row } = props;
+
+  console.log("ROW", row);
+
   const [open, setOpen] = useState(false);
 
   return (
@@ -69,27 +75,40 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
-                History
+                Details
               </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Customer</TableCell>
-                    <TableCell align="right">Amount</TableCell>
-                    <TableCell align="right">Total price ($)</TableCell>
+                    <TableCell align="center">Image</TableCell>
+                    <TableCell align="center">Brand</TableCell>
+                    <TableCell align="center">Puzzle name</TableCell>
+
+                    <TableCell align="center">Amount</TableCell>
+                    <TableCell align="center">Total Price</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
-                        {historyRow.date}
+                  {row.details.map((detailsRow) => (
+                    <TableRow key={detailsRow.image}>
+                      <TableCell component="th" scope="row" align="center">
+                        <img
+                          src={detailsRow.image}
+                          style={{ width: "50px", height: "50px" }}
+                        />
                       </TableCell>
-                      <TableCell>{historyRow.customerId}</TableCell>
-                      <TableCell align="right">{historyRow.amount}</TableCell>
-                      <TableCell align="right">
-                        {/* {Math.round(historyRow.amount * row.price * 100) / 100} */}
+                      <TableCell align="center"> {detailsRow.brand}</TableCell>
+                      <TableCell align="center">
+                        {detailsRow.puzzleName}
+                      </TableCell>
+
+                      <TableCell align="center">{detailsRow.amount}</TableCell>
+                      <TableCell align="center">
+                        {detailsRow.totalPrice}
+                      </TableCell>
+
+                      <TableCell align="center">
+                        {/* {Math.round(detailsRow.amount * row.price * 100) / 100} */}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -113,12 +132,27 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 export default function OrdersTable({ tableData }: TableDataPropsType) {
   console.log("tableData in table", tableData);
 
-  const rows = tableData.map(({ orderId, date, total }) => {
+  const rows = tableData.map(({ orderId, date, total, puzzles }) => {
+    // const subOrderDetail = puzzles.map(({quantity, {image_link, brand, title, price}}) =>({
+    //   image: image_link,
+    //   brand,
+    //   puzzleName: title,
+    //   amount: quantity,
+    //   totalPrice: price * quantity,
+    // })
+    // );
+
+    const subOrderDetail = puzzles.map((currentPuzzle) => ({
+      image: currentPuzzle.puzzle.image_link,
+      brand: currentPuzzle.puzzle.brand,
+      puzzleName: currentPuzzle.puzzle.title,
+      amount: currentPuzzle.quantity,
+      totalPrice: Number(currentPuzzle.puzzle.price) * currentPuzzle.quantity,
+    }));
+
     const formattedDate = date.slice(0, 10);
-
     const formattedTotal = formatPrice(total);
-
-    return createData(orderId, formattedDate, formattedTotal);
+    return createData(orderId, formattedDate, formattedTotal, subOrderDetail);
   });
 
   return (
