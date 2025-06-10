@@ -4,6 +4,7 @@ import { PuzzleType } from "../types";
 import { CartContext } from "../context/CartContext";
 import { Card, Typography, Box, Button } from "@mui/material";
 import QuantitySelectorButton from "./Buttons/QuantitySelectorButton";
+import formatPrice from "../utils/formatPrice";
 
 interface PuzzleProps {
   puzzle: PuzzleType;
@@ -62,7 +63,7 @@ export default function CardComponent({ puzzle }: PuzzleProps) {
           {title.length > 25 ? title.slice(0, 22).trim() + "..." : title}
         </Typography>
         <Typography>{brand}</Typography>
-        <Typography sx={{ fontWeight: "bold", mt: 1 }}>{price} Ft</Typography>
+        <Typography sx={{ fontWeight: "bold", mt: 1 }}>{formatPrice(price)} HUF</Typography>
       </Box>
 
       <Box sx={{ my: 2, height: "15%" }}>

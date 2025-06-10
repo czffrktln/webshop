@@ -10,6 +10,7 @@ import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import SnackBarComponent from "../components/SnackBarComponent";
 import { SnackbarContext } from "../context/SnackbarContext";
+import formatPrice from "../utils/formatPrice";
 
 
 export default function Cart() {
@@ -71,7 +72,7 @@ export default function Cart() {
         <Grid2 size={{ xs: 12, sm: 4, md: 3 }} sx={style.column}>
           <Typography sx={style.columnTitles}>Order Summary</Typography>
           <Typography sx={style.subtotalText} fontWeight="600">
-            Subtotal: {total} HUF
+            Subtotal: {formatPrice(total)} HUF
           </Typography>
           <Button variant="contained" onClick={() => sendOrderClick(cart)}>
             ORDER

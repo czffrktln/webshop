@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../context/UserContext";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getOrdersByUser } from "../api/order.service";
 import { useParams } from "react-router-dom";
@@ -8,11 +7,7 @@ import { OrderToTableType, OrderType } from "../types";
 import { Typography } from "@mui/material";
 
 function Profile() {
-  const { user } = useContext(UserContext);
-  const { given_name } = user;
   const { id: userId } = useParams();
-  console.log("id", userId);
-
   const [tableData, setTableData] = useState<OrderToTableType[] | []>([]);
 
   const { data, isSuccess } = useQuery<OrderType[]>({
@@ -21,13 +16,11 @@ function Profile() {
     enabled: !!userId,
   });
 
-  console.log("ordersByUser", data);
-
   useEffect(() => {
-    if (isSuccess && data) {
+    if (isSuccess && data) {      
       const rawTableData = data.map((order) => ({
         orderId: order._id,
-        date: order.createdAt,
+        date: order.createdAt.toLocaleString(),
         total: order.cart.cart_total,
         puzzles: order.cart.puzzles,
       }));
@@ -35,23 +28,35 @@ function Profile() {
     }
   }, [isSuccess, data]);
 
-  console.log("tableData", tableData);
-
   return (
     <>
       {/* <Typography variant="h5">Hello {given_name}!</Typography> */}
-      <Typography
-        variant="h5"
-        align="center"
-        marginTop="20px"
-        sx={{ letterSpacing: "1px" }}
-      >
+      <Typography variant="h5" sx={style.CenterProfileHeaders}>
         Order history
       </Typography>
 
-      {tableData.length && <OrdersTable tableData={tableData} />}
+      {tableData.length > 0 ? <OrdersTable tableData={tableData} /> :
+        <Typography variant="h6" sx={style.CenterProfileText} >
+          You don't have any orders yet.
+        </Typography>
+      }
     </>
   );
 }
 
 export default Profile;
+
+const style = {
+  CenterProfileHeaders: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "20px",
+    letterSpacing: "1px",
+  },
+  CenterProfileText: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "100px",
+    letterSpacing: "1px",
+  }
+}

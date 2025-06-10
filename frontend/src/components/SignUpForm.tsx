@@ -22,7 +22,7 @@ import { registerUser } from "../api/user.service";
 
 interface SignUpFormPropsType {
   handleCloseModal: () => void;
-  style: object;
+  modalStyle: object;
   setIsNewUserLogin: (value: boolean) => void;
 }
 
@@ -44,7 +44,7 @@ export type UserRegistrationFormType = z.infer<
 >;
 
 export default function SignUpForm({
-  style,
+  modalStyle,
   handleCloseModal,
   setIsNewUserLogin,
 }: SignUpFormPropsType) {
@@ -92,20 +92,14 @@ export default function SignUpForm({
         component="form"
         noValidate
         onSubmit={handleSubmit(onNewUserSubmit)}
-        sx={{
-          ...style,
-          width: 400,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
+        sx={{...modalStyle, ...style.modalWindow}}
       >
         <Typography variant="h6">SIGN UP</Typography>
         <Controller
           name="name"
           control={control}
           render={({ field }) => (
-            <FormControl sx={{ width: "90%", marginBottom: "10px" }}>
+            <FormControl sx={style.formElementSize}>
               <FormLabel>Name</FormLabel>
               <TextField
                 size="small"
@@ -123,7 +117,7 @@ export default function SignUpForm({
           name="email"
           control={control}
           render={({ field }) => (
-            <FormControl sx={{ width: "90%", marginBottom: "10px" }}>
+            <FormControl sx={style.formElementSize}>
               <FormLabel>Email</FormLabel>
               <TextField
                 size="small"
@@ -146,7 +140,7 @@ export default function SignUpForm({
           name="password"
           control={control}
           render={({ field }) => (
-            <FormControl sx={{ width: "90%", marginBottom: "10px" }}>
+            <FormControl sx={style.formElementSize}>
               <FormLabel>Password</FormLabel>
               <TextField
                 size="small"
@@ -164,7 +158,7 @@ export default function SignUpForm({
         <Button variant="contained" type="submit" sx={{ marginBottom: "10px" }}>
           SIGN UP
         </Button>
-        <Divider sx={{ width: "90%", marginBottom: "10px" }}>
+        <Divider sx={style.formElementSize}>
           <Typography variant="caption">OR</Typography>
         </Divider>
         <Link href={googleLoginUrl}>
@@ -188,3 +182,15 @@ export default function SignUpForm({
     </>
   );
 }
+
+const style = {
+  modalWindow: {
+    width: 400,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  formElementSize: {
+    width: "90%", marginBottom: "10px"
+  }
+};

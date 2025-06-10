@@ -128,38 +128,17 @@ export default function Home() {
     <>
       {paginatedPuzzles.length > 0 ? (
         <>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "50px",
-            }}
-          >
+          <Box sx={style.searchInputBox}>
             <SearchInput />
           </Box>
 
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-              gap: "40px 40px",
-              justifyItems: "center",
-              padding: "0 5%",
-              marginTop: "50px",
-            }}
-          >
+          <Box sx={style.puzzlesContainer}>
             {paginatedPuzzles.map((puzzle) => (
               <CardComponent key={puzzle._id} puzzle={puzzle} />
             ))}
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "50px",
-              marginBottom: "25px",
-            }}
-          >
+
+          <Box sx={style.paginationBox}>
             <Stack spacing={2}>
               <Pagination
                 count={Math.ceil(puzzles?.length / perPage)}
@@ -171,14 +150,7 @@ export default function Home() {
             </Stack>
           </Box>
 
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              marginBottom: "20px",
-            }}
-          >
+          <Box sx={style.viewSelectorBox}>
             <Typography sx={{ letterSpacing: "1px" }}>View: </Typography>
             <Select
               size="small"
@@ -202,27 +174,13 @@ export default function Home() {
             <BouncyLoader />
           ) : (
             <Box
-              sx={{
-                display: "grid",
-                justifyContent: "center",
-                marginTop: "50px",
-              }}
+              sx={style.missingAPiece.container}
             >
               <SearchInput />
               {hasSearchResult && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    margin: "auto",
-                    marginTop: "20px",
-                  }}
-                >
+                <Box sx={style.missingAPiece.imageAndText}>
                   <img width="300px" height="300px" src={sadBluePuzzle} />
-                  <Typography
-                    sx={{ textAlign: "center", letterSpacing: "1px" }}
-                  >
+                  <Typography sx={style.missingAPiece.text}>
                     Looks like we are missing a piece!
                   </Typography>
                 </Box>
@@ -246,4 +204,46 @@ const style = {
     bgcolor: "#E7F59E",
     color: "black",
   },
+  missingAPiece: {
+    container: {
+      display: "grid",
+      justifyContent: "center",
+      marginTop: "50px",
+    },
+    imageAndText: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      margin: "auto",
+      marginTop: "20px",
+    },
+    text: {
+      textAlign: "center", letterSpacing: "1px"
+    }
+  },
+  searchInputBox: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "50px",
+  },
+  puzzlesContainer: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+    gap: "40px 40px",
+    justifyItems: "center",
+    padding: "0 5%",
+    marginTop: "50px",
+  },
+  paginationBox: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "50px",
+    marginBottom: "25px",
+  },
+  viewSelectorBox: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: "20px",
+  }
 };

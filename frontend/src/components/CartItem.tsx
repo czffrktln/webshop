@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { CartItemType } from "../types";
 import QuantitySelectorButton from "./Buttons/QuantitySelectorButton";
 import { Link } from "react-router-dom";
+import formatPrice from "../utils/formatPrice";
 
 interface CartItemProps {
   cartItem: CartItemType;
@@ -64,7 +65,7 @@ export default function CartItem({ cartItem }: CartItemProps) {
               </Typography>
             </Link>
             <Typography sx={{ typography: { xs: "subtitle2", sm: "h6" } }}>
-              <strong>{price} HUF</strong>
+              <strong>{formatPrice(price)} HUF</strong>
             </Typography>
           </Grid2>
           <Grid2 container flexDirection="column">

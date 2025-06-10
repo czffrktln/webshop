@@ -5,8 +5,8 @@ import { getCurrentPuzzle } from "../api/puzzle.service";
 import { CartContext } from "../context/CartContext";
 import { PuzzleType } from "../types";
 import { Box, Button, Container, Grid2, Typography } from "@mui/material";
-import { UserContext } from "../context/UserContext";
 import QuantitySelectorButton from "../components/Buttons/QuantitySelectorButton";
+import formatPrice from "../utils/formatPrice";
 
 export default function Product() {
   const { id } = useParams();
@@ -64,7 +64,7 @@ export default function Product() {
                   {currentPuzzle.available ? "In stock" : "Out of stock"}
                 </Typography>
                 <Typography fontWeight="bold">
-                  {currentPuzzle.price} Ft
+                  {formatPrice(currentPuzzle.price)} HUF
                 </Typography>
               </Box>
               <Box sx={style.addToCartButtonBox}>

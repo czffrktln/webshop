@@ -25,7 +25,7 @@ import LoginForm from "./LoginForm";
 import { PageContext } from "../context/PageContext";
 import { SearchValueContext } from "../context/SearchValueContext";
 
-const style = {
+const modalStyle = {
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -64,7 +64,9 @@ export default function Header() {
 
   const handleProfileClick = () => {
     setAnchorEl(null)
-    navigate(`/profile/${user._id}`)
+    if (user) {
+      navigate(`/profile/${user._id}`)
+    }
   }
 
   const handleLogout = () => {
@@ -83,43 +85,35 @@ export default function Header() {
 
   return (
     <AppBar sx={{ position: "static" }}>
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Toolbar sx={style.toolbar}>
         <Box
           onClick={handleHomePageRedirect}
-          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          sx={style.logo}
         >
           <ExtensionIcon />
-          <Typography variant="h5" sx={{ cursor: "pointer" }}>
+          <Typography variant="h5" sx={style.logoText}>
             PuzzleShop
           </Typography>
         </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: { xs: 1, sm: 3, md: 4 },
-          }}
-        >
+        <Box sx={style.cartAndUser}>
           <IconButton
-            sx={{ color: "primary.contrastText" }}
+            sx={style.iconButton}
             onClick={() => navigate("/cart")}
           >
             <Badge
               badgeContent={numberOfItems}
               color="secondary"
-              sx={{
-                "& .MuiBadge-badge": { fontSize: 10, height: 15, minWidth: 15 },
-              }}
+              sx={style.cartBadge}
             >
-              <ShoppingCartIcon sx={{ fontSize: 25, cursor: "pointer" }} />
+              <ShoppingCartIcon sx={style.shoppingCartIcon} />
             </Badge>
           </IconButton>
           {user ? (
-            <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+            <Box sx={style.user}>
               <Typography>{user.given_name}</Typography>
               <IconButton onClick={handleMenu}>
-                <PersonIcon sx={{ color: "primary.contrastText" }} />
+                <PersonIcon sx={style.iconButton} />
               </IconButton>
 
               <Menu
@@ -146,12 +140,7 @@ export default function Header() {
               <Button
                 onClick={handleOpen}
                 variant="text"
-                sx={{
-                  color: "primary.contrastText",
-                  "&:focus ": {
-                    outline: "none",
-                  },
-                }}
+                sx={style.loginButton}
               >
                 Login
               </Button>
@@ -159,13 +148,13 @@ export default function Header() {
                 <>
                   {isNewUserLogin ? (
                     <SignUpForm
-                      style={style}
+                      modalStyle={modalStyle}
                       handleCloseModal={handleCloseModal}
                       setIsNewUserLogin={setIsNewUserLogin}
                     />
                   ) : (
                     <LoginForm
-                      style={style}
+                      modalStyle={modalStyle}
                       handleCloseModal={handleCloseModal}
                       setIsNewUserLogin={setIsNewUserLogin}
                     />
@@ -178,4 +167,45 @@ export default function Header() {
       </Toolbar>
     </AppBar>
   );
+}
+
+const style = {
+  toolbar: {
+    display: "flex", 
+    justifyContent: "space-between"
+  },
+  logo: {
+    display: "flex", 
+    alignItems: "center", 
+    gap: 1,
+  },
+  logoText: {
+    cursor: "pointer"
+  },
+  cartAndUser: {
+    display: "flex",
+    alignItems: "center",
+    gap: { xs: 1, sm: 3, md: 4 },
+  },
+  cartBadge: {
+    "& .MuiBadge-badge": { fontSize: 10, height: 15, minWidth: 15 }
+  },
+  shoppingCartIcon: {
+    fontSize: 25, 
+    cursor: "pointer"
+  },
+  iconButton: {
+    color: "primary.contrastText"
+  },
+  user: {
+    display: "flex", 
+    gap: 1, 
+    alignItems: "center",
+  },
+  loginButton: {
+    color: "primary.contrastText",
+   "&:focus ": {
+      outline: "none",
+   },
+  }
 }

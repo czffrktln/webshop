@@ -14,7 +14,6 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useState } from "react";
 import { OrderToTableType } from "../types";
 import formatPrice from "../utils/formatPrice";
-import { number } from "zod";
 
 interface TableDataPropsType {
   tableData: OrderToTableType[];
@@ -44,9 +43,6 @@ function createData(
 
 function Row(props: { row: ReturnType<typeof createData> }) {
   const { row } = props;
-
-  console.log("ROW", row);
-
   const [open, setOpen] = useState(false);
 
   return (
@@ -61,9 +57,6 @@ function Row(props: { row: ReturnType<typeof createData> }) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        {/* <TableCell component="th" scope="row">
-          {row.name}
-        </TableCell> */}
         <TableCell component="th" align="center">
           {row.orderId}
         </TableCell>
@@ -83,7 +76,6 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                     <TableCell align="center">Image</TableCell>
                     <TableCell align="center">Brand</TableCell>
                     <TableCell align="center">Puzzle name</TableCell>
-
                     <TableCell align="center">Amount</TableCell>
                     <TableCell align="center">Total Price</TableCell>
                   </TableRow>
@@ -101,14 +93,9 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                       <TableCell align="center">
                         {detailsRow.puzzleName}
                       </TableCell>
-
                       <TableCell align="center">{detailsRow.amount}</TableCell>
                       <TableCell align="center">
                         {formatPrice(detailsRow.totalPrice)} HUF
-                      </TableCell>
-
-                      <TableCell align="center">
-                        {/* {Math.round(detailsRow.amount * row.price * 100) / 100} */}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -121,16 +108,8 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     </>
   );
 }
-// const rows = [
-//   createData(159, 6.0, 24),
-//   createData( 237, 9.0, 37),
-//   createData(262, 16.0, 24),
-//   createData( 305, 3.7, 67),
-//   createData( 356, 16.0, 49),
-// ];
 
 export default function OrdersTable({ tableData }: TableDataPropsType) {
-  console.log("tableData in table", tableData);
 
   const rows = tableData.map(({ orderId, date, total, puzzles }) => {
     const subOrderDetail = puzzles.map((currentPuzzle) => ({
@@ -148,37 +127,27 @@ export default function OrdersTable({ tableData }: TableDataPropsType) {
 
   return (
     <>
-      {tableData.length ? (
-        <>
-          <TableContainer
-            component={Paper}
-            elevation={0}
-            sx={{ width: "80%", margin: "auto", marginTop: "5%" }}
-          >
-            <Table aria-label="collapsible table">
-              <TableHead>
-                <TableRow>
-                  <TableCell />
-
-                  <TableCell align="center">Order ID</TableCell>
-                  <TableCell align="center">Date</TableCell>
-                  <TableCell align="center">Total</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <Row key={row.orderId} row={row} />
-                ))}
-                {/* {rows.map((row) => (
-              <Row key={row.orderid} row={row} />
-            ))} */}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </>
-      ) : (
-        <h1>akarmi</h1>
-      )}
+      <TableContainer
+        component={Paper}
+        elevation={0}
+        sx={{ width: "80%", margin: "auto", marginTop: "5%" }}
+      >
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell align="center">Order ID</TableCell>
+              <TableCell align="center">Date</TableCell>
+              <TableCell align="center">Total</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <Row key={row.orderId} row={row} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   );
 }

@@ -54,18 +54,7 @@ export interface OrderType {
 
 export interface OrderToTableType {
   orderId: string;
-  date: string;
+  date: string ;
   total: number;
   puzzles: CartItemType[];
 }
-
-// export interface CartType {
-//   existingType: null | {
-//     session_id: string,
-//     puzzles: {
-//       puzzle: PuzzleType,
-//       quantity: number
-//     }[],
-
-//   }
-// }

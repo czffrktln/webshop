@@ -24,7 +24,7 @@ import { loginUser } from "../api/user.service";
 
 interface SignInFormPropsType {
   handleCloseModal: () => void;
-  style: object;
+  modalStyle: object;
   setIsNewUserLogin: (value: boolean) => void;
 }
 
@@ -40,7 +40,7 @@ export const UserLoginFormSchema = z.object({
 export type UserLoginFormType = z.infer<typeof UserLoginFormSchema>;
 
 export default function LoginForm({
-  style,
+  modalStyle,
   handleCloseModal,
   setIsNewUserLogin,
 }: SignInFormPropsType) {
@@ -88,13 +88,7 @@ export default function LoginForm({
         component="form"
         noValidate
         onSubmit={handleSubmit(onLoginSubmit)}
-        sx={{
-          ...style,
-          width: 400,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
+        sx={{...modalStyle, ...style.modalWindow}}
       >
         <Typography variant="h6">LOGIN</Typography>
 
@@ -102,7 +96,7 @@ export default function LoginForm({
           name="email"
           control={control}
           render={({ field }) => (
-            <FormControl sx={{ width: "90%", marginBottom: "10px" }}>
+            <FormControl sx={style.formElementSize}>
               <FormLabel>Email</FormLabel>
               <TextField
                 size="small"
@@ -120,7 +114,7 @@ export default function LoginForm({
           name="password"
           control={control}
           render={({ field }) => (
-            <FormControl sx={{ width: "90%", marginBottom: "10px" }}>
+            <FormControl sx={style.formElementSize}>
               <FormLabel>Password</FormLabel>
               <TextField
                 size="small"
@@ -143,7 +137,7 @@ export default function LoginForm({
         <Button variant="contained" type="submit" sx={{ marginBottom: "10px" }}>
           LOGIN
         </Button>
-        <Divider sx={{ width: "90%", marginBottom: "10px" }}>
+        <Divider sx={style.formElementSize}>
           <Typography variant="caption">OR</Typography>
         </Divider>
         <Link href={googleLoginUrl}>
@@ -167,3 +161,15 @@ export default function LoginForm({
     </>
   );
 }
+
+const style = {
+  modalWindow: {
+    width: 400,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  formElementSize: {
+    width: "90%", marginBottom: "10px"
+  }
+};

@@ -37,12 +37,6 @@ export function CartProvider({ children }: CartProviderProps) {
   const [numberOfItems, setNumberOfItems] = useState<number | null>(null);
   const [total, setTotal] = useState<number>(0);
   const [cart, setCart] = useState<CartItemType[] | []>([]);
-
-  console.log("cart", cart);
-  console.log("total", total);
-  
-  
-  
   const sessionId = checkCookie();
 
   const { data: currentCart, isFetching } = useQuery<CartType>({

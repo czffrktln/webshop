@@ -8,7 +8,7 @@ interface SnackBarProps {
   message: string;
   style: { bgcolor: string; color: string };
   snackbarState: SnackbarState;
-  setSnackbarState: ({}: SnackbarState) => void;
+  setSnackbarState: (newstate: SnackbarState) => void;
 }
 
 export default function SnackBarComponent({
