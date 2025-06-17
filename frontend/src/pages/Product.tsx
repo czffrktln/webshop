@@ -50,12 +50,23 @@ export default function Product() {
                 <Typography variant="h5">
                   Brand: {currentPuzzle.brand}
                 </Typography>
-                <Typography>
-                  Rating:{" "}
-                  {currentPuzzle.rating
-                    ? "⭐".repeat(Number(currentPuzzle.rating))
-                    : "No rating yet"}
-                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                  }}
+                >
+                  <Typography>Rating:</Typography>
+                  {currentPuzzle.rating ? (
+                    <Typography style={style.stars}>
+                      {"★".repeat(Number(currentPuzzle.rating)) +
+                        "☆".repeat(5 - Number(currentPuzzle.rating))}
+                    </Typography>
+                  ) : (
+                    <Typography style={style.stars}>{"☆".repeat(5)}</Typography>
+                  )}
+                </Box>
                 <Typography>Size: {currentPuzzle.size}</Typography>
                 <Typography>
                   Serial no.: {currentPuzzle.serial_number}
@@ -106,5 +117,9 @@ const style = {
     display: "flex",
     justifyContent: "flex-start",
     width: "100%",
+  },
+  stars: {
+    fontSize: "30px",
+    color: "#9BC4CB",
   },
 };
