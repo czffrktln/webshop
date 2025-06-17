@@ -39,7 +39,7 @@ const modalStyle = {
 export default function Header() {
   const navigate = useNavigate();
   const { setPage } = useContext(PageContext);
-  const { setSearchValue } = useContext(SearchValueContext)
+  const { setSearchValue } = useContext(SearchValueContext);
   const { user, setUser } = useContext(UserContext);
   const { numberOfItems, setCart } = useContext(CartContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -62,12 +62,12 @@ export default function Header() {
     setAnchorEl(null);
   };
 
-  const handleProfileClick = () => {
-    setAnchorEl(null)
+  const handleOrdersClick = () => {
+    setAnchorEl(null);
     if (user) {
-      navigate(`/profile/${user._id}`)
+      navigate(`/orders/${user._id}`);
     }
-  }
+  };
 
   const handleLogout = () => {
     navigate("/");
@@ -79,17 +79,14 @@ export default function Header() {
 
   function handleHomePageRedirect() {
     navigate("/");
-    setSearchValue("")
+    setSearchValue("");
     setPage(1);
   }
 
   return (
     <AppBar sx={{ position: "static" }}>
       <Toolbar sx={style.toolbar}>
-        <Box
-          onClick={handleHomePageRedirect}
-          sx={style.logo}
-        >
+        <Box onClick={handleHomePageRedirect} sx={style.logo}>
           <ExtensionIcon />
           <Typography variant="h5" sx={style.logoText}>
             PuzzleShop
@@ -97,10 +94,7 @@ export default function Header() {
         </Box>
 
         <Box sx={style.cartAndUser}>
-          <IconButton
-            sx={style.iconButton}
-            onClick={() => navigate("/cart")}
-          >
+          <IconButton sx={style.iconButton} onClick={() => navigate("/cart")}>
             <Badge
               badgeContent={numberOfItems}
               color="secondary"
@@ -131,7 +125,7 @@ export default function Header() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
+                <MenuItem onClick={handleOrdersClick}>Orders</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </Box>
@@ -171,16 +165,16 @@ export default function Header() {
 
 const style = {
   toolbar: {
-    display: "flex", 
-    justifyContent: "space-between"
+    display: "flex",
+    justifyContent: "space-between",
   },
   logo: {
-    display: "flex", 
-    alignItems: "center", 
+    display: "flex",
+    alignItems: "center",
     gap: 1,
   },
   logoText: {
-    cursor: "pointer"
+    cursor: "pointer",
   },
   cartAndUser: {
     display: "flex",
@@ -188,24 +182,24 @@ const style = {
     gap: { xs: 1, sm: 3, md: 4 },
   },
   cartBadge: {
-    "& .MuiBadge-badge": { fontSize: 10, height: 15, minWidth: 15 }
+    "& .MuiBadge-badge": { fontSize: 10, height: 15, minWidth: 15 },
   },
   shoppingCartIcon: {
-    fontSize: 25, 
-    cursor: "pointer"
+    fontSize: 25,
+    cursor: "pointer",
   },
   iconButton: {
-    color: "primary.contrastText"
+    color: "primary.contrastText",
   },
   user: {
-    display: "flex", 
-    gap: 1, 
+    display: "flex",
+    gap: 1,
     alignItems: "center",
   },
   loginButton: {
     color: "primary.contrastText",
-   "&:focus ": {
+    "&:focus ": {
       outline: "none",
-   },
-  }
-}
+    },
+  },
+};

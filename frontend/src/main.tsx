@@ -12,7 +12,7 @@ import { CartProvider } from "./context/CartContext.tsx";
 import { createTheme, ThemeProvider } from "@mui/material";
 import Cart from "./pages/Cart.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Profile from "./pages/Profile.tsx";
+import Orders from "./pages/Orders.tsx";
 
 const queryClient = new QueryClient();
 
@@ -30,8 +30,8 @@ const theme = createTheme({
       main: "#9BC4CB",
     },
     warning: {
-      main: "#EF959D"
-    }
+      main: "#EF959D",
+    },
   },
 });
 
@@ -57,8 +57,8 @@ const router = createBrowserRouter([
         element: <Cart />,
       },
       {
-        path: "/profile/:id",
-        element: <Profile />,
+        path: "/orders/:id",
+        element: <Orders />,
       },
     ],
   },

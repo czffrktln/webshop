@@ -6,7 +6,7 @@ import OrdersTable from "../components/OrdersTable";
 import { OrderToTableType, OrderType } from "../types";
 import { Typography } from "@mui/material";
 
-function Profile() {
+function Orders() {
   const { id: userId } = useParams();
   const [tableData, setTableData] = useState<OrderToTableType[] | []>([]);
 
@@ -17,7 +17,7 @@ function Profile() {
   });
 
   useEffect(() => {
-    if (isSuccess && data) {      
+    if (isSuccess && data) {
       const rawTableData = data.map((order) => ({
         orderId: order._id,
         date: order.createdAt.toLocaleString(),
@@ -31,32 +31,34 @@ function Profile() {
   return (
     <>
       {/* <Typography variant="h5">Hello {given_name}!</Typography> */}
-      <Typography variant="h5" sx={style.CenterProfileHeaders}>
+      <Typography variant="h5" sx={style.CenterOrdersHeaders}>
         Order history
       </Typography>
 
-      {tableData.length > 0 ? <OrdersTable tableData={tableData} /> :
-        <Typography variant="h6" sx={style.CenterProfileText} >
+      {tableData.length > 0 ? (
+        <OrdersTable tableData={tableData} />
+      ) : (
+        <Typography variant="h6" sx={style.CenterOrdersText}>
           You don't have any orders yet.
         </Typography>
-      }
+      )}
     </>
   );
 }
 
-export default Profile;
+export default Orders;
 
 const style = {
-  CenterProfileHeaders: {
+  CenterOrdersHeaders: {
     display: "flex",
     justifyContent: "center",
     marginTop: "20px",
     letterSpacing: "1px",
   },
-  CenterProfileText: {
+  CenterOrdersText: {
     display: "flex",
     justifyContent: "center",
     marginTop: "100px",
     letterSpacing: "1px",
-  }
-}
+  },
+};

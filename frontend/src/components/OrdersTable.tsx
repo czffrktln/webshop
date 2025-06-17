@@ -47,7 +47,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 
   return (
     <>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
+      <TableRow sx={styles.row.tableRow}>
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -64,9 +64,9 @@ function Row(props: { row: ReturnType<typeof createData> }) {
         <TableCell align="center">{row.total} HUF</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={styles.row.dropdownCells} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
+            <Box sx={styles.row.detailsContainer}>
               <Typography variant="h6" gutterBottom component="div">
                 Details
               </Typography>
@@ -86,7 +86,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                       <TableCell component="th" scope="row" align="center">
                         <img
                           src={detailsRow.image}
-                          style={{ width: "50px", height: "50px" }}
+                          style={styles.row.detailsImage}
                         />
                       </TableCell>
                       <TableCell align="center"> {detailsRow.brand}</TableCell>
@@ -110,7 +110,6 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 }
 
 export default function OrdersTable({ tableData }: TableDataPropsType) {
-
   const rows = tableData.map(({ orderId, date, total, puzzles }) => {
     const subOrderDetail = puzzles.map((currentPuzzle) => ({
       image: currentPuzzle.puzzle.image_link,
@@ -130,7 +129,7 @@ export default function OrdersTable({ tableData }: TableDataPropsType) {
       <TableContainer
         component={Paper}
         elevation={0}
-        sx={{ width: "80%", margin: "auto", marginTop: "5%" }}
+        sx={styles.ordersTable.tableContainer}
       >
         <Table aria-label="collapsible table">
           <TableHead>
@@ -151,6 +150,18 @@ export default function OrdersTable({ tableData }: TableDataPropsType) {
     </>
   );
 }
-// function useState(arg0: boolean): [any, any] {
-//   throw new Error('Function not implemented.');
-// }
+
+const styles = {
+  row: {
+    tableRow: { "& > *": { borderBottom: "unset" } },
+    dropdownCells: {
+      paddingBottom: 0,
+      paddingTop: 0,
+    },
+    detailsContainer: { margin: 1 },
+    detailsImage: { width: "50px", height: "50px" },
+  },
+  ordersTable: {
+    tableContainer: { width: "80%", margin: "auto", marginTop: "5%" },
+  },
+};
