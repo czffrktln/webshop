@@ -14,6 +14,10 @@ import Cart from "./pages/Cart.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Orders from "./pages/Orders.tsx";
 
+import { Provider } from "react-redux";
+import store from "./store/store.ts";
+import { StrictMode } from "react";
+
 const queryClient = new QueryClient();
 
 // #EF959D lazac
@@ -67,15 +71,17 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   // <StrictMode>
   <ThemeProvider theme={theme}>
-    <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <UserProvider>
-          <PuzzleProvider>
-            <RouterProvider router={router} />
-          </PuzzleProvider>
-        </UserProvider>
-      </CartProvider>
-    </QueryClientProvider>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <CartProvider>
+          <UserProvider>
+            <PuzzleProvider>
+              <RouterProvider router={router} />
+            </PuzzleProvider>
+          </UserProvider>
+        </CartProvider>
+      </QueryClientProvider>
+    </Provider>
   </ThemeProvider>
   // </StrictMode>
 );

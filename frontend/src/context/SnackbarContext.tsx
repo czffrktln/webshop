@@ -37,7 +37,6 @@ export function SnackbarProvider({ children }: SnackbarProviderProps) {
   });
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
-  console.log("snacki context open:", snackbarState.open);
   return (
     <SnackbarContext.Provider
       value={{
