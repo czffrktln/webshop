@@ -16,17 +16,21 @@ import {
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { PageContext } from "../context/PageContext";
 import { SearchValueContext } from "../context/SearchValueContext";
 import { default as sadBluePuzzle } from "../assets/sadpuzzle2.png";
 import useCartMutation from "../hooks/useCartMutation";
 import SnackBarComponent from "../components/SnackBarComponent";
 import { SnackbarContext } from "../context/SnackbarContext";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/store";
+import { setPage } from "../store/features/pageSlice";
 
 export default function Home() {
   useCartMutation();
 
-  const { page, setPage } = useContext(PageContext);
+  const page = useSelector((state: RootState) => state.page);
+  const dispatch = useDispatch<AppDispatch>();
+
   const { searchValue } = useContext(SearchValueContext);
   const {
     snackbarState,
@@ -60,7 +64,7 @@ export default function Home() {
 
   function handleOnPerPageChange(e: SelectChangeEvent<number>) {
     setPerPage(Number(e.target.value));
-    setPage(1);
+    dispatch(setPage(1));
   }
 
   useEffect(() => {
@@ -102,7 +106,7 @@ export default function Home() {
         setHasSearchResult(false);
       }
       setPuzzles(filteredPuzzles);
-      setPage(1);
+      dispatch(setPage(1));
     }
   }, [searchValue]);
 
@@ -110,7 +114,7 @@ export default function Home() {
     event: React.ChangeEvent<unknown>,
     value: number
   ) {
-    setPage(value);
+    dispatch(setPage(value));
   }
 
   useEffect(() => {
