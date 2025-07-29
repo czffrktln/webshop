@@ -9,31 +9,25 @@ import { getCookie } from "../utils/cookies";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import SnackBarComponent from "../components/SnackBarComponent";
-import { SnackbarContext } from "../context/SnackbarContext";
 import formatPrice from "../utils/formatPrice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store/store";
+import { setSnackbar } from "../store/features/snackbarSlice";
 
 
 export default function Cart() {
   const { cart, total, setCart } = useContext(CartContext);
-  const {
-    snackbarState,
-    setSnackbarState,
-    snackbarMessage,
-    setSnackbarMessage,
-  } = useContext(SnackbarContext);
   const { user } = useContext(UserContext);
-  const navigate = useNavigate();
 
+  const dispatch = useDispatch<AppDispatch>();
+
+  const navigate = useNavigate();
 
   const onOrderMutation = useMutation({
     mutationFn: (cart: CartType) => sendOrder(cart),
     onSuccess: () => {
       console.log("sikerült az order");
-      setSnackbarMessage("Your order has been sent");
-      setSnackbarState({
-        ...snackbarState,
-        open: true,
-      });
+      dispatch(setSnackbar({open: true, message: "Your order has been sent"}))
       navigate("/");
       setCart([]);
     },
@@ -41,11 +35,7 @@ export default function Cart() {
 
   function sendOrderClick(cart: CartItemType[]) {
     if (!user) {
-      setSnackbarMessage("You must log in to order");
-      setSnackbarState({
-        ...snackbarState,
-        open: true,
-      });
+      dispatch(setSnackbar({open: true, message: "You must log in to order"}))
     } else {
       onOrderMutation.mutate({
         session_id: getCookie("sessionId"),
@@ -82,10 +72,7 @@ export default function Cart() {
 
       {!user && (
         <SnackBarComponent
-          message={snackbarMessage}
           style={style.snackBarContent}
-          snackbarState={snackbarState}
-          setSnackbarState={setSnackbarState}
         />
       )}
     </Container>

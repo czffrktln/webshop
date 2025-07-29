@@ -2,7 +2,6 @@ import "./App.css";
 import Header from "./components/Header";
 import { Outlet, useSearchParams } from "react-router-dom";
 import { SearchValueProvider } from "./context/SearchValueContext";
-import { SnackbarProvider } from "./context/SnackbarContext";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "./store/store";
 import { useEffect } from "react";
@@ -18,12 +17,10 @@ function App() {
 
   return (
     <div className="app">
-      <SnackbarProvider>
-        <SearchValueProvider>
-            <Header />
-            <Outlet />
-        </SearchValueProvider>
-      </SnackbarProvider>
+      <SearchValueProvider>
+        <Header />
+        <Outlet />
+      </SearchValueProvider>
     </div>
   );
 }
