@@ -22,10 +22,10 @@ import PersonIcon from "@mui/icons-material/Person";
 
 import SignUpForm from "./SignUpForm";
 import LoginForm from "./LoginForm";
-import { SearchValueContext } from "../context/SearchValueContext";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store/store";
 import { setPage } from "../store/features/pageSlice";
+import { setSearchValue } from "../store/features/searchValueSlice";
 
 const modalStyle = {
   position: "absolute",
@@ -40,7 +40,6 @@ const modalStyle = {
 
 export default function Header() {
   const navigate = useNavigate();
-  const { setSearchValue } = useContext(SearchValueContext);
   const { user, setUser } = useContext(UserContext);
   const { numberOfItems, setCart } = useContext(CartContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -82,7 +81,7 @@ export default function Header() {
 
   function handleHomePageRedirect() {
     navigate("/");
-    setSearchValue("");
+    dispatch(setSearchValue(""));
     dispatch(setPage(1));
   }
 

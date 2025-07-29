@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import pageReducer from "./features/pageSlice";
 import snackbarReducer from './features/snackbarSlice';
+import searchValueReducer from './features/searchValueSlice';
 
 const store = configureStore({
   reducer: {
     page: pageReducer,
-    snackbar: snackbarReducer
+    snackbar: snackbarReducer,
+    searchValue: searchValueReducer
   },
 });
 

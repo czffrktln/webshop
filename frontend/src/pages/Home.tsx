@@ -14,9 +14,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { SearchValueContext } from "../context/SearchValueContext";
 import { default as sadBluePuzzle } from "../assets/sadpuzzle2.png";
 import useCartMutation from "../hooks/useCartMutation";
 import SnackBarComponent from "../components/SnackBarComponent";
@@ -28,9 +27,9 @@ export default function Home() {
   useCartMutation();
 
   const page = useSelector((state: RootState) => state.page);
+  const searchValue = useSelector((state: RootState) => state.searchValue);
+  
   const dispatch = useDispatch<AppDispatch>();
-
-  const { searchValue } = useContext(SearchValueContext);
 
   const [perPage, setPerPage] = useState(12);
 
@@ -59,7 +58,7 @@ export default function Home() {
 
   function handleOnPerPageChange(e: SelectChangeEvent<number>) {
     setPerPage(Number(e.target.value));
-    dispatch(setPage(1));
+   dispatch(setPage(1));
   }
 
   useEffect(() => {
