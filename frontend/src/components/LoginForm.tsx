@@ -13,14 +13,15 @@ import { googleLoginUrl } from "../utils/constants";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { decodeToken } from "../utils/decodeToken";
-
-import { UserContext } from "../context/UserContext";
 
 import LoginSignUpToggleButton from "./Buttons/LoginSignUpToggleButton";
 import { useMutation } from "@tanstack/react-query";
 import { loginUser } from "../api/user.service";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store/store";
+import { setUser } from "../store/features/userSlice";
 
 interface SignInFormPropsType {
   handleCloseModal: () => void;
@@ -46,7 +47,7 @@ export default function LoginForm({
 }: SignInFormPropsType) {
   const [authenticationError, setAuthenticationError] = useState(false);
 
-  const { setUser } = useContext(UserContext);
+  const dispatch = useDispatch<AppDispatch>();
 
   const { control, formState, handleSubmit, reset, watch } =
     useForm<UserLoginFormType>({
@@ -65,7 +66,9 @@ export default function LoginForm({
 
     onSuccess: (response) => {
       sessionStorage.setItem("token", response);
-      setUser(decodeToken(response));
+
+      dispatch(setUser(decodeToken(response)));
+
       reset();
       handleCloseModal();
     },
@@ -88,7 +91,7 @@ export default function LoginForm({
         component="form"
         noValidate
         onSubmit={handleSubmit(onLoginSubmit)}
-        sx={{...modalStyle, ...style.modalWindow}}
+        sx={{ ...modalStyle, ...style.modalWindow }}
       >
         <Typography variant="h6">LOGIN</Typography>
 
@@ -170,6 +173,7 @@ const style = {
     alignItems: "center",
   },
   formElementSize: {
-    width: "90%", marginBottom: "10px"
-  }
+    width: "90%",
+    marginBottom: "10px",
+  },
 };

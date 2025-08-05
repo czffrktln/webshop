@@ -6,20 +6,17 @@ import { useMutation } from "@tanstack/react-query";
 import { CartItemType, CartType } from "../types";
 import { sendOrder } from "../api/order.service";
 import { getCookie } from "../utils/cookies";
-import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import SnackBarComponent from "../components/SnackBarComponent";
 import formatPrice from "../utils/formatPrice";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/store";
 import { setSnackbar } from "../store/features/snackbarSlice";
-
 
 export default function Cart() {
   const { cart, total, setCart } = useContext(CartContext);
-  const { user } = useContext(UserContext);
-
   const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector((state: RootState) => state.user);
 
   const navigate = useNavigate();
 
@@ -27,7 +24,9 @@ export default function Cart() {
     mutationFn: (cart: CartType) => sendOrder(cart),
     onSuccess: () => {
       console.log("sikerült az order");
-      dispatch(setSnackbar({open: true, message: "Your order has been sent"}))
+      dispatch(
+        setSnackbar({ open: true, message: "Your order has been sent" })
+      );
       navigate("/");
       setCart([]);
     },
@@ -35,13 +34,15 @@ export default function Cart() {
 
   function sendOrderClick(cart: CartItemType[]) {
     if (!user) {
-      dispatch(setSnackbar({open: true, message: "You must log in to order"}))
+      dispatch(
+        setSnackbar({ open: true, message: "You must log in to order" })
+      );
     } else {
       onOrderMutation.mutate({
         session_id: getCookie("sessionId"),
         puzzles: cart,
         user_id: user._id,
-        cart_total: total
+        cart_total: total,
       });
     }
   }
@@ -70,11 +71,7 @@ export default function Cart() {
         </Grid2>
       </Grid2>
 
-      {!user && (
-        <SnackBarComponent
-          style={style.snackBarContent}
-        />
-      )}
+      {!user && <SnackBarComponent style={style.snackBarContent} />}
     </Container>
   );
 }

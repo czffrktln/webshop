@@ -6,6 +6,8 @@ import { AppDispatch } from "./store/store";
 import { useEffect } from "react";
 import { setPage } from "./store/features/pageSlice";
 import { setSearchValue } from "./store/features/searchValueSlice";
+import { setUser } from "./store/features/userSlice";
+import { decodeToken } from "./utils/decodeToken";
 
 function App() {
   const [searchParams] = useSearchParams();
@@ -13,8 +15,13 @@ function App() {
 
   useEffect(() => {
     dispatch(setPage(Number(searchParams.get("page") ?? 1)));
-    dispatch(setSearchValue(searchParams.get("search") ??  ""))
+    dispatch(setSearchValue(searchParams.get("search") ?? ""));
   }, [searchParams]);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    if (token) setUser(decodeToken(token));
+  }, []);
 
   return (
     <div className="app">

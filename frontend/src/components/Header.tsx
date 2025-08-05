@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { UserContext } from "../context/UserContext";
 import { CartContext } from "../context/CartContext";
 
 import {
@@ -22,10 +21,11 @@ import PersonIcon from "@mui/icons-material/Person";
 
 import SignUpForm from "./SignUpForm";
 import LoginForm from "./LoginForm";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/store";
 import { setPage } from "../store/features/pageSlice";
 import { setSearchValue } from "../store/features/searchValueSlice";
+import { clearUser } from "../store/features/userSlice";
 
 const modalStyle = {
   position: "absolute",
@@ -40,12 +40,13 @@ const modalStyle = {
 
 export default function Header() {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+
   const { numberOfItems, setCart } = useContext(CartContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [isNewUserLogin, setIsNewUserLogin] = useState<boolean>(false);
 
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleOpen = () => {
@@ -74,7 +75,7 @@ export default function Header() {
   const handleLogout = () => {
     navigate("/");
     setAnchorEl(null);
-    setUser(null);
+    dispatch(clearUser());
     setCart([]);
     sessionStorage.removeItem("token");
   };

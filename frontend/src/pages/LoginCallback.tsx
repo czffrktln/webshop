@@ -2,13 +2,17 @@ import { useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import BouncyLoader from "../components/BouncyLoader";
-import { UserContext } from "../context/UserContext";
+
 import { decodeToken } from "../utils/decodeToken";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store/store";
+import { setUser } from "../store/features/userSlice";
 
 export default function LoginCallback() {
-  const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const hasSentCode = useRef(false);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const urlSearchParams = new URLSearchParams(window.location.search);
   const googleCode = urlSearchParams.get("code");
@@ -20,8 +24,9 @@ export default function LoginCallback() {
     const response = await axios.post("http://localhost:3000/login", {
       code: googleCode,
     });
-    sessionStorage.setItem("token", response.data)
-    setUser(decodeToken(response.data))
+    sessionStorage.setItem("token", response.data);
+    dispatch(setUser(decodeToken(response.data)));
+
     navigate("/");
   };
 
@@ -29,7 +34,5 @@ export default function LoginCallback() {
     sendCode();
   }, []);
 
-  return (
-    <BouncyLoader />
-  );
+  return <BouncyLoader />;
 }

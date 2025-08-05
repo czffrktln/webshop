@@ -6,7 +6,6 @@ import App from "./App.tsx";
 import Home from "./pages/Home.tsx";
 import Product from "./pages/Product.tsx";
 import LoginCallback from "./pages/LoginCallback.tsx";
-import { UserProvider } from "./context/UserContext.tsx";
 import { CartProvider } from "./context/CartContext.tsx";
 import { createTheme, ThemeProvider } from "@mui/material";
 import Cart from "./pages/Cart.tsx";
@@ -73,9 +72,7 @@ createRoot(document.getElementById("root")!).render(
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <CartProvider>
-          <UserProvider>
-              <RouterProvider router={router} />
-          </UserProvider>
+          <RouterProvider router={router} />
         </CartProvider>
       </QueryClientProvider>
     </Provider>

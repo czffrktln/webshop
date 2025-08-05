@@ -15,10 +15,12 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext, useEffect, useState } from "react";
 import { decodeToken } from "../utils/decodeToken";
-import { UserContext } from "../context/UserContext";
 import LoginSignUpToggleButton from "./Buttons/LoginSignUpToggleButton";
 import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "../api/user.service";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store/store";
+import { setUser } from "../store/features/userSlice";
 
 interface SignUpFormPropsType {
   handleCloseModal: () => void;
@@ -49,7 +51,8 @@ export default function SignUpForm({
   setIsNewUserLogin,
 }: SignUpFormPropsType) {
   const [emailError, setEmailError] = useState(false);
-  const { setUser } = useContext(UserContext);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const { control, formState, handleSubmit, reset, watch } =
     useForm<UserRegistrationFormType>({
@@ -68,13 +71,13 @@ export default function SignUpForm({
 
     onSuccess: (response) => {
       sessionStorage.setItem("token", response);
-      setUser(decodeToken(response));
+      dispatch(setUser(decodeToken(response)));
       reset();
       handleCloseModal();
     },
     onError: (error: string) => {
       console.log(error);
-      setEmailError(true)
+      setEmailError(true);
     },
   });
 
@@ -92,7 +95,7 @@ export default function SignUpForm({
         component="form"
         noValidate
         onSubmit={handleSubmit(onNewUserSubmit)}
-        sx={{...modalStyle, ...style.modalWindow}}
+        sx={{ ...modalStyle, ...style.modalWindow }}
       >
         <Typography variant="h6">SIGN UP</Typography>
         <Controller
@@ -191,6 +194,7 @@ const style = {
     alignItems: "center",
   },
   formElementSize: {
-    width: "90%", marginBottom: "10px"
-  }
+    width: "90%",
+    marginBottom: "10px",
+  },
 };
