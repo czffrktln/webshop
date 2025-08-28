@@ -24,7 +24,7 @@ import { AppDispatch, RootState } from "../store/store";
 import { setPage } from "../store/features/pageSlice";
 
 export default function Home() {
-  useCartMutation();
+  // useCartMutation();
 
   const page = useSelector((state: RootState) => state.page);
   const searchValue = useSelector((state: RootState) => state.searchValue);

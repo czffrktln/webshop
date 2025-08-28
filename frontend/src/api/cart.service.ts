@@ -1,6 +1,8 @@
 import { CartType } from "../types";
 
 export async function writeCurrentCart(currentCart: CartType) {
+  console.log("writeCurrentCart fut");
+  
   const response = await fetch("http://localhost:3000/cart", {
     method: "POST",
     headers: {
@@ -11,13 +13,17 @@ export async function writeCurrentCart(currentCart: CartType) {
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
+ 
   return await response.json();
 }
 
 export async function getCartBySesionId(sessionId: string) {
+  console.log("getCartBySesionId fut");
+  
   const response = await fetch(`http://localhost:3000/cart/${sessionId}`);
   if (!response.ok) {
     throw new Error(`An error occured: ${response.status}`);
   }
+
   return await response.json();
 }

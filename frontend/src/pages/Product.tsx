@@ -7,10 +7,15 @@ import { PuzzleType } from "../types";
 import { Box, Button, Container, Grid2, Typography } from "@mui/material";
 import QuantitySelectorButton from "../components/Buttons/QuantitySelectorButton";
 import formatPrice from "../utils/formatPrice";
+import { AppDispatch, RootState } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../store/features/cartSlice";
 
 export default function Product() {
   const { id } = useParams();
-  const { addToCart, cart } = useContext(CartContext);
+  // const { addToCart, cart } = useContext(CartContext);
+  const cart = useSelector((state: RootState) => state.cart.cart);
+  const dispatch = useDispatch<AppDispatch>();
 
   const {
     data: currentPuzzle,
@@ -84,7 +89,7 @@ export default function Product() {
                 ) : (
                   <Button
                     variant="contained"
-                    onClick={() => addToCart(currentPuzzle)}
+                    onClick={() => dispatch(addToCart(currentPuzzle))}
                   >
                     Add to cart
                   </Button>

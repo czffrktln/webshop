@@ -39,10 +39,7 @@ export interface CartTypeToDatabase {
 export interface CartType {
   user_id?: string | null;
   session_id: string;
-  puzzles: {
-    puzzle: PuzzleType;
-    quantity: number;
-  }[];
+  puzzles: CartItemType[];
   cart_total: number;
 }
 

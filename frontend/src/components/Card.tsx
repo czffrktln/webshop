@@ -1,10 +1,13 @@
-import { CSSProperties, useContext } from "react";
+import { CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
 import { PuzzleType } from "../types";
-import { CartContext } from "../context/CartContext";
 import { Card, Typography, Box, Button } from "@mui/material";
 import QuantitySelectorButton from "./Buttons/QuantitySelectorButton";
 import formatPrice from "../utils/formatPrice";
+import { AppDispatch, RootState } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../store/features/cartSlice";
+
 
 interface PuzzleProps {
   puzzle: PuzzleType;
@@ -12,8 +15,10 @@ interface PuzzleProps {
 
 export default function CardComponent({ puzzle }: PuzzleProps) {
   const { title, image_link, brand, price, _id } = puzzle;
-  const { addToCart, cart } = useContext(CartContext);
   const navigate = useNavigate();
+  const cart = useSelector((state: RootState) => state.cart);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const [currentItem] = cart.filter((item) => item.puzzle._id === _id);
 
@@ -34,7 +39,7 @@ export default function CardComponent({ puzzle }: PuzzleProps) {
         {currentItem ? (
           <QuantitySelectorButton cartItem={currentItem} />
         ) : (
-          <Button variant="contained" onClick={() => addToCart(puzzle)}>
+          <Button variant="contained" onClick={() => dispatch(addToCart(puzzle))}>
             Add to cart
           </Button>
         )}

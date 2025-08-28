@@ -1,8 +1,5 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { CartContext } from "../context/CartContext";
-
 import {
   AppBar,
   Toolbar,
@@ -26,6 +23,7 @@ import { AppDispatch, RootState } from "../store/store";
 import { setPage } from "../store/features/pageSlice";
 import { setSearchValue } from "../store/features/searchValueSlice";
 import { clearUser } from "../store/features/userSlice";
+import { clearCart } from "../store/features/cartSlice";
 
 const modalStyle = {
   position: "absolute",
@@ -41,12 +39,12 @@ const modalStyle = {
 export default function Header() {
   const navigate = useNavigate();
 
-  const { numberOfItems, setCart } = useContext(CartContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [isNewUserLogin, setIsNewUserLogin] = useState<boolean>(false);
 
   const user = useSelector((state: RootState) => state.user);
+  const { numberOfItems } = useSelector((state: RootState) => state.cartTotals)
   const dispatch = useDispatch<AppDispatch>();
 
   const handleOpen = () => {
@@ -76,7 +74,7 @@ export default function Header() {
     navigate("/");
     setAnchorEl(null);
     dispatch(clearUser());
-    setCart([]);
+    dispatch(clearCart());
     sessionStorage.removeItem("token");
   };
 

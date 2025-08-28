@@ -7,6 +7,9 @@ import { CartItemType } from "../types";
 import QuantitySelectorButton from "./Buttons/QuantitySelectorButton";
 import { Link } from "react-router-dom";
 import formatPrice from "../utils/formatPrice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store/store";
+import { removeItem } from "../store/features/cartSlice";
 
 interface CartItemProps {
   cartItem: CartItemType;
@@ -14,7 +17,8 @@ interface CartItemProps {
 
 export default function CartItem({ cartItem }: CartItemProps) {
   const { image_link, brand, title, pieces, price, _id } = cartItem.puzzle;
-  const { removeItem } = useContext(CartContext);
+  // const { removeItem } = useContext(CartContext);
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <Grid2
@@ -65,7 +69,7 @@ export default function CartItem({ cartItem }: CartItemProps) {
             <QuantitySelectorButton cartItem={cartItem} />
 
             <Grid2>
-              <IconButton onClick={() => removeItem(_id)}>
+              <IconButton onClick={() => dispatch(removeItem(_id))}>
                 <DeleteIcon sx={style.deleteIcon} />
               </IconButton>
             </Grid2>

@@ -2,6 +2,9 @@ import { Button, Grid2, Typography } from "@mui/material";
 import { useContext } from "react";
 import { CartContext } from "../../context/CartContext";
 import { CartItemType } from "../../types";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store/store";
+import { decreaseAmount, increaseAmount } from "../../store/features/cartSlice";
 
 interface QuantitySelectorButtonPropsType {
   cartItem: CartItemType;
@@ -10,13 +13,14 @@ interface QuantitySelectorButtonPropsType {
 export default function QuantitySelectorButton({
   cartItem,
 }: QuantitySelectorButtonPropsType) {
-  const { increaseAmount, decreaseAmount } = useContext(CartContext);
+  // const { increaseAmount, decreaseAmount } = useContext(CartContext);
   const { quantity } = cartItem;
+  const dispatch = useDispatch<AppDispatch>()
 
   return (
     <Grid2 container gap={1}>
       <Button
-        onClick={() => decreaseAmount(cartItem)}
+        onClick={() => dispatch(decreaseAmount(cartItem))}
         variant="contained"
         sx={{
           padding: 0,
@@ -31,7 +35,7 @@ export default function QuantitySelectorButton({
       <Typography>{quantity}</Typography>
 
       <Button
-        onClick={() => increaseAmount(cartItem)}
+        onClick={() => dispatch(increaseAmount(cartItem))}
         variant="contained"
         sx={{
           padding: 0,

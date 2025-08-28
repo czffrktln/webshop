@@ -1,6 +1,4 @@
 import { Box, Button, Container, Grid2, Typography } from "@mui/material";
-import { CartContext } from "../context/CartContext";
-import { useContext } from "react";
 import CartItem from "../components/CartItem";
 import { useMutation } from "@tanstack/react-query";
 import { CartItemType, CartType } from "../types";
@@ -12,11 +10,13 @@ import formatPrice from "../utils/formatPrice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store/store";
 import { setSnackbar } from "../store/features/snackbarSlice";
+import { clearCart } from "../store/features/cartSlice";
 
 export default function Cart() {
-  const { cart, total, setCart } = useContext(CartContext);
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user);
+  const cart = useSelector((state: RootState) => state.cart);
+  const { total } = useSelector((state: RootState) => state.cartTotals);
 
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ export default function Cart() {
         setSnackbar({ open: true, message: "Your order has been sent" })
       );
       navigate("/");
-      setCart([]);
+      dispatch(clearCart());
     },
   });
 
