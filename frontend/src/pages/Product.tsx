@@ -2,7 +2,6 @@ import { CSSProperties, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentPuzzle } from "../api/puzzle.service";
-import { CartContext } from "../context/CartContext";
 import { PuzzleType } from "../types";
 import { Box, Button, Container, Grid2, Typography } from "@mui/material";
 import QuantitySelectorButton from "../components/Buttons/QuantitySelectorButton";
@@ -13,7 +12,6 @@ import { addToCart } from "../store/features/cartSlice";
 
 export default function Product() {
   const { id } = useParams();
-  // const { addToCart, cart } = useContext(CartContext);
   const cart = useSelector((state: RootState) => state.cart.cart);
   const dispatch = useDispatch<AppDispatch>();
 

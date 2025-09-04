@@ -1,6 +1,5 @@
 import { Button, Grid2, Typography } from "@mui/material";
-import { useContext } from "react";
-import { CartContext } from "../../context/CartContext";
+
 import { CartItemType } from "../../types";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store";
@@ -13,9 +12,8 @@ interface QuantitySelectorButtonPropsType {
 export default function QuantitySelectorButton({
   cartItem,
 }: QuantitySelectorButtonPropsType) {
-  // const { increaseAmount, decreaseAmount } = useContext(CartContext);
   const { quantity } = cartItem;
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <Grid2 container gap={1}>

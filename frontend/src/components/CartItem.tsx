@@ -1,8 +1,7 @@
 import { Grid2, IconButton, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import { CartContext } from "../context/CartContext";
-import { CSSProperties, useContext } from "react";
+import { CSSProperties } from "react";
 import { CartItemType } from "../types";
 import QuantitySelectorButton from "./Buttons/QuantitySelectorButton";
 import { Link } from "react-router-dom";
@@ -17,7 +16,7 @@ interface CartItemProps {
 
 export default function CartItem({ cartItem }: CartItemProps) {
   const { image_link, brand, title, pieces, price, _id } = cartItem.puzzle;
-  // const { removeItem } = useContext(CartContext);
+
   const dispatch = useDispatch<AppDispatch>();
 
   return (
