@@ -17,7 +17,6 @@ import useCartMutation from "./hooks/useCartMutation";
 import { setCartTotals } from "./store/features/cartTotalsSlice";
 
 function App() {
-
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams] = useSearchParams();
   const sessionId = checkCookie();
@@ -28,17 +27,15 @@ function App() {
     dispatch(setPage(Number(searchParams.get("page") ?? 1)));
     dispatch(setSearchValue(searchParams.get("search") ?? ""));
   }, [searchParams]);
-  
+
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     if (token) dispatch(setUser(decodeToken(token)));
   }, []);
-  
 
   useEffect(() => {
-    dispatch(setCartTotals(cart))
-  }, [cart])
-
+    dispatch(setCartTotals(cart));
+  }, [cart]);
 
   const { data: currentCart, isSuccess } = useQuery<CartType>({
     queryKey: ["cart", sessionId],
@@ -47,12 +44,11 @@ function App() {
 
   useEffect(() => {
     if (isSuccess && currentCart) {
-      dispatch(setCart(currentCart.puzzles))
+      dispatch(setCart(currentCart.puzzles));
     }
-  }, [isSuccess])
-  
-  useCartMutation()
+  }, [isSuccess]);
 
+  useCartMutation();
 
   return (
     <div className="app">

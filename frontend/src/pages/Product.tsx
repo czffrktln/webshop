@@ -1,4 +1,4 @@
-import { CSSProperties, useContext } from "react";
+import { CSSProperties, useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentPuzzle } from "../api/puzzle.service";
@@ -12,7 +12,7 @@ import { addToCart } from "../store/features/cartSlice";
 
 export default function Product() {
   const { id } = useParams();
-  const cart = useSelector((state: RootState) => state.cart.cart);
+  const cart = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch<AppDispatch>();
 
   const {
